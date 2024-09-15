@@ -1,11 +1,17 @@
 "use client";
 
+import { useSession, signIn, signOut } from "next-auth/react";
+
 import { MdEmail } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
+import { MdHomeFilled } from "react-icons/md";
 
 import AuthHeader from "@/components/auth-header";
+import Link from "next/link";
 
 const Signin = () => {
+  const { data: session } = useSession();
+
   return (
     <section
       className="
@@ -41,6 +47,7 @@ const Signin = () => {
               py-2
               px-4
               rounded-md
+              outline-none
             "
           />
         </div>
@@ -61,6 +68,7 @@ const Signin = () => {
               py-2
               px-4
               rounded-md
+              outline-none
             "
           />
         </div>
@@ -97,6 +105,21 @@ const Signin = () => {
           Register in now
         </button>
       </form>
+      <div
+        className="
+          w-fit
+          ml-auto
+          px-16
+          mt-4
+        "
+      >
+        <Link
+          href="/"
+          className="text-blue-600 cursor-pointer hover:text-blue-700 duration-300"
+        >
+          <MdHomeFilled size={36} />
+        </Link>
+      </div>
     </section>
   );
 };

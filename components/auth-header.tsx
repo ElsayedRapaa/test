@@ -1,3 +1,7 @@
+"use client";
+
+import Link from "next/link";
+
 const AuthHeader = () => {
   return (
     <header
@@ -9,7 +13,9 @@ const AuthHeader = () => {
         shadow-sm
       "
     >
-      <h1 className="text-xl font-bold text-blue-600">Mastercoin</h1>
+      <Link href="/" className="text-xl font-bold text-blue-600">
+        Mastercoin
+      </Link>
     </header>
   );
 };
