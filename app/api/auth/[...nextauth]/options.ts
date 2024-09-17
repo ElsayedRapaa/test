@@ -48,22 +48,50 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  // callbacks: {
+  //   async jwt({ token, user }) {
+  //     if (user) {
+  //       token._id = user._id?.toString();
+  //       token.isVerified = user.isVerified;
+  //       token.isAcceptingMessages = user.isAcceptingMessages;
+  //       token.username = user.username;
+  //     }
+  //     return token;
+  //   },
+  //   async session({ session, token }) {
+  //     if (token) {
+  //       session.user._id = token._id;
+  //       session.user.isVerified = token.isVerified;
+  //       session.user.isAcceptingMessages = token.isAcceptingMessages;
+  //       session.user.username = token.username;
+  //     }
+  //     return session;
+  //   },
+  // },
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id?.toString();
-        token.isVerified = user.isVerified;
+        token.isVerify = user.isVerify;
         token.isAcceptingMessages = user.isAcceptingMessages;
         token.username = user.username;
+        token.wallets = user.wallets;
+        token.transactionHistory = user.transactionHistory;
+        token.binanceApiKey = user.binanceApiKey;
+        token.binanceApiSecret = user.binanceApiSecret;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
-        session.user.isVerified = token.isVerified;
+        session.user.isVerify = token.isVerify;
         session.user.isAcceptingMessages = token.isAcceptingMessages;
         session.user.username = token.username;
+        session.user.wallets = token.wallets;
+        session.user.transactionHistory = token.transactionHistory;
+        session.user.binanceApiKey = token.binanceApiKey;
+        session.user.binanceApiSecret = token.binanceApiSecret;
       }
       return session;
     },

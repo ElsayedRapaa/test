@@ -7,7 +7,7 @@ export const sidebarLinks = [
   {
     id: 1,
     title: "My account",
-    href: "/",
+    href: "/account",
     icon: MdAccountBalanceWallet,
   },
   {

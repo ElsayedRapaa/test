@@ -7,7 +7,7 @@ export const mainLinks = [
   {
     id: 1,
     title: "My account",
-    href: "/",
+    href: "/account",
     icon: MdAccountBalanceWallet,
   },
   {

@@ -1,9 +1,9 @@
 "use client";
 
+import useCoins from "@/hooks/use-coins";
 import Image from "next/image";
 import Link from "next/link";
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 const coins = [
   "btcusdt",
@@ -62,7 +62,7 @@ const coinImages: { [key: string]: string } = {
 };
 
 const CoinList = () => {
-  const [coinData, setCoinData] = useState<{ [key: string]: any }>({});
+  const { coinData, updateCoinData } = useCoins();
 
   useEffect(() => {
     const ws = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
@@ -81,19 +81,13 @@ const CoinList = () => {
             volume: parseFloat(update.q),
             high24h: parseFloat(update.h),
             low24h: parseFloat(update.l),
+            name: symbol.replace("usdt", "").toUpperCase(),
+            image: coinImages[symbol] || "",
           };
         }
       });
 
-      setCoinData(newCoinData);
-    };
-
-    ws.onclose = () => {
-      console.log("WebSocket closed");
-    };
-
-    ws.onerror = (error) => {
-      console.error("WebSocket error: ", error);
+      updateCoinData(newCoinData);
     };
 
     return () => {
@@ -142,7 +136,7 @@ const CoinList = () => {
                   </h2>
                 </div>
                 <h3 className="text-black font-semibold mx-auto">
-                  {data.price > 1000
+                  {data.price > 100
                     ? data.price.toFixed(2)
                     : data.price.toFixed(8)}
                 </h3>
