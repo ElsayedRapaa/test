@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { BiArrowBack } from "react-icons/bi";
 
 const HeaderBackButton = () => {
-  const router = useRouter();
-
   return (
     <div
       className="
@@ -22,15 +20,12 @@ const HeaderBackButton = () => {
         z-20
       "
     >
-      <button
-        onClick={() => router.back()}
-        className="outline-none border-none bg-transparent"
-      >
+      <Link href="/" className="outline-none border-none bg-transparent">
         <BiArrowBack
           size={28}
           className="cursor-pointer text-black hover:text-blue-600 duration-200"
         />
-      </button>
+      </Link>
     </div>
   );
 };

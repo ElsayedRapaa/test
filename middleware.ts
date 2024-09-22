@@ -4,19 +4,25 @@ import { getToken } from "next-auth/jwt";
 
 export async function middleware(request: NextRequest) {
   const token = await getToken({ req: request });
-  const url = request.nextUrl;
+  const { nextUrl } = request;
 
   if (
     token &&
-    (url.pathname.startsWith("/sign-in") ||
-      url.pathname.startsWith("/sign-up") ||
-      url.pathname.startsWith("/verify") ||
-      url.pathname.startsWith("/"))
+    (nextUrl.pathname.startsWith("/sign-in") ||
+      nextUrl.pathname.startsWith("/sign-up") ||
+      nextUrl.pathname.startsWith("/verify") ||
+      nextUrl.pathname === "/")
   ) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
+
+  if (!token && nextUrl.pathname !== "/sign-in") {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/sign-in", "/sign-up", "/", "/dashboard/:path*", "/verify/:path*"],
+  matcher: ["/sign-in", "/sign-up", "/verify/:path*"],
 };

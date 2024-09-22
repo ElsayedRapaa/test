@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import useCoins from "@/hooks/use-coins";
@@ -69,7 +71,6 @@ const CoinList = () => {
 
     ws.onmessage = (event) => {
       const updates = JSON.parse(event.data);
-
       const newCoinData = { ...coinData };
 
       updates.forEach((update: any) => {
@@ -91,38 +92,26 @@ const CoinList = () => {
     };
 
     return () => {
-      ws.close();
+      if (
+        ws.readyState === WebSocket.OPEN ||
+        ws.readyState === WebSocket.CONNECTING
+      ) {
+        ws.close();
+      }
     };
   }, [coinData]);
 
   return (
-    <div
-      className="
-        px-4
-        py-6
-      "
-    >
+    <div className="px-4 py-6">
       <h1 className="text-2xl font-bold text-black">Crypto Prices</h1>
       {coins.map((coin) => {
         const data = coinData[coin];
         return (
           data && (
-            <div
-              className="
-              flex
-              flex-col
-            "
-            >
+            <div className="flex flex-col" key={coin}>
               <Link
                 href={`/coin/${coin}`}
-                className="
-                px-4
-                py-2
-                grid
-                grid-cols-3
-                hover:bg-gray-100
-                duration-200
-              "
+                className="px-4 py-2 grid grid-cols-3 hover:bg-gray-100 duration-200"
               >
                 <div className="flex items-center gap-x-4">
                   <Image
@@ -130,6 +119,7 @@ const CoinList = () => {
                     alt={coin}
                     width={25}
                     height={25}
+                    style={{ width: "auto", height: "auto" }}
                   />
                   <h2 className="text-black font-bold text-lg">
                     {coin.replace("usdt", "").toUpperCase()}
@@ -141,18 +131,13 @@ const CoinList = () => {
                     : data.price.toFixed(8)}
                 </h3>
                 <span
-                  className={`
-                    rounded-md
-                    text-white
-                    ml-auto
-                    w-24
-                    flex
-                    items-center
-                    justify-center
-                    ${data.priceChangePercentage24h > 0 && "bg-green-700"}
-                    ${data.priceChangePercentage24h < 0 && "bg-red-700"}
-                    ${data.priceChangePercentage24h == 0 && "bg-gray-300"}
-                  `}
+                  className={`rounded-md text-white ml-auto w-24 flex items-center justify-center ${
+                    data.priceChangePercentage24h > 0
+                      ? "bg-green-700"
+                      : data.priceChangePercentage24h < 0
+                      ? "bg-red-700"
+                      : "bg-gray-300"
+                  }`}
                 >
                   {data.priceChangePercentage24h}%
                 </span>

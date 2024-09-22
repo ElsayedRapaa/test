@@ -1,6 +1,5 @@
 "use client";
 
-import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -16,46 +15,50 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { MdEmail } from "react-icons/md";
-import { FaLock } from "react-icons/fa";
+import { FaLock, FaUser } from "react-icons/fa";
 import { MdHomeFilled } from "react-icons/md";
 
 import AuthHeader from "@/components/auth-header";
 import { useRouter } from "next/navigation";
-import { signInSchema } from "@/schemas/signin-schema";
+import { signUpSchema } from "@/schemas/signup-schema";
 import Link from "next/link";
 
-const Signin = () => {
+const Register = () => {
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof signInSchema>>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
     defaultValues: {
-      identifier: "",
+      username: "",
+      email: "",
       password: "",
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
+  const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
     setPending(true);
-    const result = await signIn("credentials", {
-      redirect: false,
-      identifier: data.identifier,
-      password: data.password,
-    });
+    try {
+      const response = await fetch("/api/sign-up", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (result?.error) {
-      if (result.error === "CredentialsSignin") {
-        setError("Incorrect username of password");
+      const result = await response.json();
+      if (!result.success) {
+        setError(result.message);
       } else {
-        setError(result.error);
+        router.push("/signin");
       }
+    } catch (err) {
+      setError("An error occurred during registration");
+    } finally {
+      setPending(false);
     }
-    if (result?.url) {
-      router.replace("/");
-    }
-    setPending(false);
   };
 
   return (
@@ -80,11 +83,44 @@ const Signin = () => {
         >
           <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
             <div className="bg-gray-100 px-2">
+              <FaUser size={22} className="text-black" />
+            </div>
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      placeholder="Your Name"
+                      className="
+                        focus:placeholder:opacity-0
+                        placeholder:duration-300
+                        min-w-[320px]
+                        w-[730px]
+                        py-2
+                        px-4
+                        rounded-md
+                        outline-none
+                        text-black
+                      "
+                      disabled={pending}
+                      required
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
+            <div className="bg-gray-100 px-2">
               <MdEmail size={22} className="text-black" />
             </div>
             <FormField
               control={form.control}
-              name="identifier"
+              name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
@@ -161,11 +197,11 @@ const Signin = () => {
             disabled={pending}
             type="submit"
           >
-            Login
+            Register
           </Button>
           <Link
-            href="/register"
-            className="
+            href="/signin"
+            className={`
               text-blue-600
               bg-transparent
               cursor-pointer
@@ -178,9 +214,10 @@ const Signin = () => {
               hover:text-white
               duration-300
               text-center
-            "
+              ${pending && "opacity-70 pointer-events-none"}
+            `}
           >
-            Register in now
+            Login
           </Link>
         </form>
       </Form>
@@ -210,4 +247,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Register;

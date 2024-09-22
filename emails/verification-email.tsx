@@ -11,12 +11,12 @@ import {
 
 interface VerificationEmailProps {
   username: string;
-  opt: string;
+  otp: string;
 }
 
 export default function VerificationEmail({
   username,
-  opt,
+  otp,
 }: VerificationEmailProps) {
   return (
     <Html lang="en" dir="ltr">
@@ -33,7 +33,7 @@ export default function VerificationEmail({
           fontStyle="normal"
         />
       </Head>
-      <Preview>Here&apos;s your verification code: {opt}</Preview>
+      <Preview>Here&apos;s your verification code: {otp}</Preview>
       <Section>
         <Row>
           <Heading as="h2">Hello {username},</Heading>
@@ -41,7 +41,7 @@ export default function VerificationEmail({
         <Row>
           <Text>
             Thank you for registering. Please use the following verification cod
-            to complete your registration;
+            to complete your registration; The Verify Code Is: {otp}
           </Text>
         </Row>
         <Row>

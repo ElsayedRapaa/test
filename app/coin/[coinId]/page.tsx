@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import HeaderBackButton from "@/components/header-back-button";
@@ -29,19 +30,33 @@ const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
     script.async = true;
 
     script.onload = () => {
-      new (window as any).TradingView.widget({
-        symbol: `BINANCE:${formattedCoinId}`,
-        container_id: "tradingview-chart",
-        width: "90%",
-        height: "500px",
-        theme: "dark",
-        style: "1",
-        locale: "en",
-        toolbar_bg: "#ffffff",
-        enable_publishing: false,
-        allow_symbol_change: true,
-        save_image: false,
-      });
+      console.log("TradingView script loaded successfully");
+
+      setTimeout(() => {
+        const container = document.getElementById("tradingview-chart");
+        if (container) {
+          console.log("Container found, creating TradingView widget...");
+          new (window as any).TradingView.widget({
+            symbol: `BINANCE:${formattedCoinId}`,
+            container_id: "tradingview-chart",
+            width: "90%",
+            height: "500px",
+            theme: "dark",
+            style: "1",
+            locale: "en",
+            toolbar_bg: "#ffffff",
+            enable_publishing: false,
+            allow_symbol_change: true,
+            save_image: false,
+          });
+        } else {
+          console.error("Container for TradingView widget not found");
+        }
+      }, 100);
+    };
+
+    script.onerror = () => {
+      console.error("Failed to load TradingView script");
     };
 
     document.body.appendChild(script);
@@ -71,7 +86,13 @@ const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
             gap-x-4
           "
         >
-          <Image src={data.image} alt={data.name} width={30} height={30} />
+          <Image
+            src={data.image}
+            alt={data.name}
+            width={30}
+            height={30}
+            style={{ width: "auto", height: "auto" }}
+          />
           <h1 className="text-lg font-bold text-black">{data.name}</h1>
           <h1 className="text-lg font-bold text-black">${data.price}</h1>
         </div>

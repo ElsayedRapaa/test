@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 import { MdClose } from "react-icons/md";
 import { sidebarLinks } from "./sidebar-links/links";
@@ -68,6 +68,7 @@ const Sidebar = () => {
             duration-300
             mt-6
           "
+          onClick={() => signOut()}
         >
           Logout
         </button>

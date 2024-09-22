@@ -7,6 +7,7 @@ declare module "next-auth" {
     isVerify?: boolean;
     isAcceptingMessages?: boolean;
     username?: string;
+    verifyCode?: string;
     wallets?: {
       currency: string;
       balance: number;
@@ -18,8 +19,6 @@ declare module "next-auth" {
       amount: number;
       date: Date;
     }[];
-    binanceApiKey?: string;
-    binanceApiSecret?: string;
   }
 
   interface Session {
@@ -28,6 +27,8 @@ declare module "next-auth" {
       isVerify?: boolean;
       isAcceptingMessages?: boolean;
       username?: string;
+      email?: string;
+      verifyCode?: string;
       wallets?: {
         currency: string;
         balance: number;
@@ -39,8 +40,6 @@ declare module "next-auth" {
         amount: number;
         date: Date;
       }[];
-      binanceApiKey?: string;
-      binanceApiSecret?: string;
     } & DefaultSession["user"];
   }
 }
@@ -51,6 +50,7 @@ declare module "next-auth/jwt" {
     isVerify?: boolean;
     isAcceptingMessages?: boolean;
     username?: string;
+    verifyCode?: string;
     wallets?: {
       currency: string;
       balance: number;
@@ -62,7 +62,5 @@ declare module "next-auth/jwt" {
       amount: number;
       date: Date;
     }[];
-    binanceApiKey?: string;
-    binanceApiSecret?: string;
   }
 }

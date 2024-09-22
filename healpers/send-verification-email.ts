@@ -12,7 +12,7 @@ export async function sendVerificationEmail(
       from: "onboarding@resend.dev",
       to: email,
       subject: "Next.js | Verification Code",
-      react: VerificationEmail({ username, opt: verifiCode }),
+      react: VerificationEmail({ username, otp: verifiCode }),
     });
     return { success: true, message: "Verification email send successfully" };
   } catch (emailError) {

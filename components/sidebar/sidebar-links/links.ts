@@ -19,7 +19,7 @@ export const sidebarLinks = [
   {
     id: 3,
     title: "Authentication",
-    href: "/signin",
+    href: "/verify-code",
     icon: FaUserCheck,
   },
   {

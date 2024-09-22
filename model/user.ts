@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+import crypto from "crypto";
 
 export interface Wallet {
   currency: string;
@@ -23,8 +24,6 @@ export interface User extends Document {
   isAcceptingMessage: boolean;
   wallets: Wallet[];
   transactionHistory: Transaction[];
-  binanceApiKey: string;
-  binanceApiSecret: string;
 }
 
 const WalletSchema: Schema<Wallet> = new Schema({
@@ -74,15 +73,20 @@ const UserSchema: Schema<User> = new Schema({
     default: true,
   },
   wallets: [WalletSchema],
-  transactionHistory: [TransactionSchema],
-  binanceApiKey: {
-    type: String,
-    required: [true, "Binance API key is required!"],
-  },
-  binanceApiSecret: {
-    type: String,
-    required: [true, "Binance API secret is required!"],
-  },
+  transactionHistory: { type: [TransactionSchema], default: [] },
+});
+
+UserSchema.pre("save", function (next) {
+  if (this.isNew) {
+    const currencies = ["BTC", "ETH", "BNB", "USDT"];
+    const generatedWallets = currencies.map((currency) => ({
+      currency,
+      address: crypto.randomBytes(20).toString("hex"),
+      balance: 0,
+    }));
+    this.wallets = generatedWallets;
+  }
+  next();
 });
 
 const UserModel =

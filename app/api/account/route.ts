@@ -11,9 +11,7 @@ const getUserProfile = async (userId: string) => {
   await connectToDatabase();
 
   const user = await UserModel.findById(userId)
-    .select(
-      "username email wallets transactionHistory binanceApiKey binanceApiSecret"
-    )
+    .select("username email wallets transactionHistory")
     .exec();
 
   if (!user) {
