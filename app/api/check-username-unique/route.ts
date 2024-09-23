@@ -13,19 +13,18 @@ export async function GET(request: NextRequest) {
 
   try {
     const { searchParams } = new URL(request.url);
-    const queryParams = {
-      username: searchParams.get("username"),
-    };
+    const username = searchParams.get("username");
 
-    const result = UsernameQuerySchema.safeParse(queryParams);
+    const validationResult = UsernameQuerySchema.safeParse({ username });
 
-    if (!result.success) {
-      const usernameError = result.error.format().username?._errors || [];
+    if (!validationResult.success) {
+      const usernameError =
+        validationResult.error.format().username?._errors || [];
       return new Response(
         JSON.stringify({
           success: false,
           message:
-            usernameError?.length > 0
+            usernameError.length > 0
               ? usernameError.join(", ")
               : "Invalid query parameters",
         }),
@@ -33,29 +32,19 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const { username } = result.data;
-
     const existingVerifiedUser = await UserModel.findOne({
       username,
       isVerify: true,
     });
 
-    if (existingVerifiedUser) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: "Username is already taken",
-        }),
-        { status: 400 }
-      );
-    }
-
     return new Response(
       JSON.stringify({
-        success: true,
-        message: "Username is unique",
+        success: !existingVerifiedUser,
+        message: existingVerifiedUser
+          ? "Username is already taken"
+          : "Username is unique",
       }),
-      { status: 200 }
+      { status: existingVerifiedUser ? 400 : 200 }
     );
   } catch (error) {
     console.error("Error checking username", error);
