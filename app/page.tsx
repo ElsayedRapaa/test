@@ -2,7 +2,6 @@ import CoinList from "@/components/crypto-currency/coin-list";
 import Header from "@/components/header";
 import MainLinks from "@/components/main-links/main-links";
 import Swiper from "@/components/swiper/swiper";
-import VerifyIdenitiy from "@/components/verify-idenitiy";
 
 export default function Home() {
   return (
@@ -15,7 +14,6 @@ export default function Home() {
           px-4
         "
       >
-        <VerifyIdenitiy />
         <Swiper />
         <MainLinks />
       </section>

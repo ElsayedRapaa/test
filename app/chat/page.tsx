@@ -21,7 +21,7 @@ const Chat = () => {
         "
       >
         <Link
-          href="https://t.me/erapaa"
+          href="https://t.me/eatthebl0cks"
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-600 underline font-semibold"

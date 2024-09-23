@@ -11,7 +11,7 @@ export async function sendVerificationEmail(
     await resend.emails.send({
       from: "onboarding@resend.dev",
       to: email,
-      subject: "Next.js | Verification Code",
+      subject: "MasterCoin | Verification Code",
       react: VerificationEmail({ username, otp: verifiCode }),
     });
     return { success: true, message: "Verification email send successfully" };
