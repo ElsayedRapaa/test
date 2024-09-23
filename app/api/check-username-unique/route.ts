@@ -8,12 +8,13 @@ const UsernameQuerySchema = z.object({
   username: usernameValidation,
 });
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   await db();
 
   try {
-    const { searchParams } = new URL(request.url);
-    const username = searchParams.get("username");
+    // const { searchParams } = new URL(request.url);
+    // const username = searchParams.get("username");
+    const { username } = await request.json();
 
     const validationResult = UsernameQuerySchema.safeParse({ username });
 

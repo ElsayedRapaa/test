@@ -40,12 +40,12 @@ const VerifyCode = () => {
 
       const result = await response.json();
       if (!result.success) {
-        console.log(result.message);
+        alert(result.message);
       } else {
         router.push("/");
       }
     } catch (err) {
-      console.log("Error Verification Code Not Valid", err);
+      console.error("Error Verification Code Not Valid", err);
     }
   };
 
