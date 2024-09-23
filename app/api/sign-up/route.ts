@@ -2,8 +2,9 @@ import db from "@/lib/db";
 import UserModel from "@/model/user";
 import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "@/healpers/send-verification-email";
+import { NextRequest } from "next/server";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   await db();
 
   try {

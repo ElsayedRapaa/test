@@ -2,12 +2,13 @@ import db from "@/lib/db";
 import UserModel from "@/model/user";
 import { z } from "zod";
 import { usernameValidation } from "@/schemas/signup-schema";
+import { NextRequest } from "next/server";
 
 const UsernameQuerySchema = z.object({
   username: usernameValidation,
 });
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   await db();
 
   try {

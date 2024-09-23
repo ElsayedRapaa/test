@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 import mongoose from "mongoose";
 import UserModel from "@/model/user";
 
@@ -21,25 +21,30 @@ const getUserProfile = async (userId: string) => {
   return user;
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method Not Allowed" });
-  }
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get("userId");
 
-  const { userId } = req.query;
-
-  if (typeof userId !== "string") {
-    return res.status(400).json({ error: "Invalid userId" });
+  if (!userId || typeof userId !== "string") {
+    return NextResponse.json({ error: "Invalid userId" }, { status: 400 });
   }
 
   try {
     const user = await getUserProfile(userId);
-    res.status(200).json(user);
-  } catch (error) {
-    console.error("Failed to fetch user profile:", error);
-    res.status(500).json({ error: "Failed to fetch user profile" });
+    return NextResponse.json(user, { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Failed to fetch user profile:", error.message);
+      return NextResponse.json(
+        { error: "Failed to fetch user profile" },
+        { status: 500 }
+      );
+    } else {
+      console.error("An unknown error occurred:", error);
+      return NextResponse.json(
+        { error: "An unknown error occurred" },
+        { status: 500 }
+      );
+    }
   }
 }

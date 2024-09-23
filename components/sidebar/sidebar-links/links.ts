@@ -25,12 +25,12 @@ export const sidebarLinks = [
   {
     id: 4,
     title: "Chat",
-    href: "/",
+    href: "/chat",
     icon: RiChatSmile2Fill,
   },
   {
     id: 5,
-    title: "!&A",
+    title: "Q&A",
     href: "/",
     icon: HiQuestionMarkCircle,
   },

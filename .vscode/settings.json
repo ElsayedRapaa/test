@@ -1,4 +1,7 @@
 {
   "pieces.cloudCapabilities": "Blended",
-  "pieces.telemetry": true
+  "pieces.telemetry": true,
+  "terminal.integrated.commandsToSkipShell": [
+    "\"terminal.integrated.fontFamily\": \"'Cascadia Code', 'Courier New', monospace\""
+  ]
 }

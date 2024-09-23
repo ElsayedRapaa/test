@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import UserModel from "@/model/user";
 import db from "@/lib/db";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   await db();
 
   const userId = req.headers.get("userid");

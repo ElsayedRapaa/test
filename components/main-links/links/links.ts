@@ -13,7 +13,7 @@ export const mainLinks = [
   {
     id: 2,
     title: "Withdraw coins",
-    href: "/",
+    href: "/account",
     icon: HiMiniFolderArrowDown,
   },
   {
@@ -25,7 +25,7 @@ export const mainLinks = [
   {
     id: 4,
     title: "Chat",
-    href: "/",
+    href: "/chat",
     icon: RiChatSmile2Fill,
   },
 ];
