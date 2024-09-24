@@ -60,6 +60,8 @@ const VerifyCode = () => {
         </div>
       </section>
     );
+  } else if (!session?.user) {
+    router.push("/signin");
   }
 
   return (
