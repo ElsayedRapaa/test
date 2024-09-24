@@ -5,7 +5,7 @@
 import useCoins from "@/hooks/use-coins";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const coins = [
   "btcusdt",
@@ -65,6 +65,7 @@ const coinImages: { [key: string]: string } = {
 
 const CoinList = () => {
   const { coinData, updateCoinData } = useCoins();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const ws = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
@@ -89,6 +90,7 @@ const CoinList = () => {
       });
 
       updateCoinData(newCoinData);
+      setLoading(false);
     };
 
     return () => {
@@ -103,49 +105,57 @@ const CoinList = () => {
 
   return (
     <div className="px-4 py-6">
-      <h1 className="text-2xl font-bold text-black">Crypto Prices</h1>
-      {coins.map((coin) => {
-        const data = coinData[coin];
-        return (
-          data && (
-            <div className="flex flex-col" key={coin}>
-              <Link
-                href={`/coin/${coin}`}
-                className="px-4 py-2 grid grid-cols-3 hover:bg-gray-100 duration-200"
-              >
-                <div className="flex items-center gap-x-4">
-                  <Image
-                    src={coinImages[coin]}
-                    alt={coin}
-                    width={25}
-                    height={25}
-                    style={{ width: "auto", height: "auto" }}
-                  />
-                  <h2 className="text-black font-bold text-lg">
-                    {coin.replace("usdt", "").toUpperCase()}
-                  </h2>
-                </div>
-                <h3 className="text-black font-semibold mx-auto">
-                  {data.price > 100
-                    ? data.price.toFixed(2)
-                    : data.price.toFixed(8)}
-                </h3>
-                <span
-                  className={`rounded-md text-white ml-auto w-24 flex items-center justify-center ${
-                    data.priceChangePercentage24h > 0
-                      ? "bg-green-700"
-                      : data.priceChangePercentage24h < 0
-                      ? "bg-red-700"
-                      : "bg-gray-300"
-                  }`}
+      <h1 className="text-2xl font-bold text-black border-b mb-3 pb-2">
+        Crypto Prices
+      </h1>
+      {loading ? (
+        <div className="flex justify-center items-center h-64 bg-white">
+          <p className="text-2xl font-bold  text-black">Loading...</p>
+        </div>
+      ) : (
+        coins.map((coin) => {
+          const data = coinData[coin];
+          return (
+            data && (
+              <div className="flex flex-col" key={coin}>
+                <Link
+                  href={`/coin/${coin}`}
+                  className="px-4 py-2 grid grid-cols-3 hover:bg-gray-100 duration-200"
                 >
-                  {data.priceChangePercentage24h}%
-                </span>
-              </Link>
-            </div>
-          )
-        );
-      })}
+                  <div className="flex items-center gap-x-4">
+                    <Image
+                      src={coinImages[coin]}
+                      alt={coin}
+                      width={25}
+                      height={25}
+                      style={{ width: "auto", height: "auto" }}
+                    />
+                    <h2 className="text-black font-bold">
+                      {coin.replace("usdt", "").toUpperCase()}
+                    </h2>
+                  </div>
+                  <h3 className="text-red-500 font-semibold ml-auto">
+                    {data.price > 100
+                      ? data.price.toFixed(2)
+                      : data.price.toFixed(8)}
+                  </h3>
+                  <span
+                    className={`rounded-md text-white ml-auto w-24 flex items-center justify-center ${
+                      data.priceChangePercentage24h > 0
+                        ? "bg-green-700"
+                        : data.priceChangePercentage24h < 0
+                        ? "bg-red-700"
+                        : "bg-gray-300"
+                    }`}
+                  >
+                    {data.priceChangePercentage24h}%
+                  </span>
+                </Link>
+              </div>
+            )
+          );
+        })
+      )}
     </div>
   );
 };

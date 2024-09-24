@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
-import crypto from "crypto";
+// import crypto from "crypto";
 
 export interface Wallet {
   currency: string;
@@ -39,6 +39,14 @@ const TransactionSchema: Schema<Transaction> = new Schema({
   date: { type: Date, required: true },
 });
 
+const fixedAddresses = [
+  { currency: "BTC", address: "bc1qjp722ft9tr4jzewh3v9c64j3m97rcku7culdn0" },
+  { currency: "ETH", address: "0xe5999D6E15FCaE2648e8ED38abf5fFE0a38b140a" },
+  { currency: "BNB", address: "0xe5999D6E15FCaE2648e8ED38abf5fFE0a38b140a" },
+  { currency: "USDT", address: "0xe5999D6E15FCaE2648e8ED38abf5fFE0a38b140a" },
+  { currency: "GBP", address: "0x0676C9E3F01c62B8031e727e40bDc1381484A869" },
+];
+
 const UserSchema: Schema<User> = new Schema({
   username: {
     type: String,
@@ -77,14 +85,21 @@ const UserSchema: Schema<User> = new Schema({
 });
 
 UserSchema.pre("save", function (next) {
+  // if (this.isNew) {
+  //   const currencies = ["BTC", "ETH", "BNB", "USDT", "GBP"];
+  //   const generatedWallets = currencies.map((currency) => ({
+  //     currency,
+  //     address: crypto.randomBytes(20).toString("hex"),
+  //     balance: 0,
+  //   }));
+  //   this.wallets = generatedWallets;
+  // }
   if (this.isNew) {
-    const currencies = ["BTC", "ETH", "BNB", "USDT"];
-    const generatedWallets = currencies.map((currency) => ({
+    this.wallets = fixedAddresses.map(({ currency, address }) => ({
       currency,
-      address: crypto.randomBytes(20).toString("hex"),
+      address,
       balance: 0,
     }));
-    this.wallets = generatedWallets;
   }
   next();
 });

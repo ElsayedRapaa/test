@@ -1,21 +1,23 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import Image from "next/image";
 
 interface QRCodeAddProps {
-  walletAddres: string;
+  walletAddress: string;
   walletCurrency: string;
 }
 
 const QRCodeAdd: React.FC<QRCodeAddProps> = ({
-  walletAddres,
+  walletAddress,
   walletCurrency,
 }) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
   useEffect(() => {
-    if (walletAddres) {
-      QRCode.toDataURL(walletAddres)
+    if (walletAddress) {
+      QRCode.toDataURL(walletAddress)
         .then((url) => {
           setQrCodeUrl(url);
         })
@@ -23,11 +25,11 @@ const QRCodeAdd: React.FC<QRCodeAddProps> = ({
           console.error("Error generating QR Code:", err);
         });
     }
-  }, [walletAddres]);
+  }, [walletAddress]);
 
   return (
     <div className="py-2">
-      <h3 className="pb-4">Scan code to send funds {walletCurrency}</h3>
+      <h3 className="pb-4">Scan code to send funds in {walletCurrency}</h3>
       <div className="mx-auto w-fit">
         {qrCodeUrl ? (
           <Image

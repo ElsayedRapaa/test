@@ -19,6 +19,7 @@ const coinImage: { [key: string]: string } = {
   eth: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
   bnb: "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png",
   usdt: "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png",
+  gbp: "https://assets.coingecko.com/coins/images/279/large/pound-symbol.png",
 };
 
 const ProfilePage = () => {
@@ -55,7 +56,7 @@ const ProfilePage = () => {
   if (status === "loading" || !session)
     return (
       <div className="h-full bg-white flex items-center justify-center">
-        <h1 className="text-3xl font-bold w-fit">Loading...</h1>
+        <h1 className="text-3xl font-bold w-fit text-black">Loading...</h1>
       </div>
     );
 
@@ -68,6 +69,8 @@ const ProfilePage = () => {
     setIsPopupOpen(false);
     setSelectedWallet(null);
   };
+
+  console.log(wallets.map((item) => item.currency));
 
   return (
     <div className="bg-gray-100 text-black">

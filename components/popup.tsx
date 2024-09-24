@@ -1,6 +1,7 @@
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
 import QRCodeAdd from "@/components/qr-code";
+import { FiCopy } from "react-icons/fi";
 
 interface WalletPopupProps {
   walletCurrency: string;
@@ -15,6 +16,12 @@ const WalletPopup: React.FC<WalletPopupProps> = ({
   isOpen,
   onClose,
 }) => {
+  const handleCopyAddress = () => {
+    navigator.clipboard.writeText(walletAddress).then(() => {
+      alert("Wallet address copied!");
+    });
+  };
+
   return (
     <Popup open={isOpen} onClose={onClose} modal>
       <div className="modal p-4 text-black text-center flex flex-col gap-y-4">
@@ -24,9 +31,16 @@ const WalletPopup: React.FC<WalletPopupProps> = ({
           <p className="py-1">
             Wallet Address: <br />{" "}
             <span className="py-2 block">{walletAddress}</span>
+            <button
+              onClick={handleCopyAddress}
+              className="ml-2 bg-gray-200 p-1 rounded-full hover:bg-gray-300"
+              title="Copy Address"
+            >
+              <FiCopy className="text-lg" />
+            </button>
           </p>
           <QRCodeAdd
-            walletAddres={walletAddress}
+            walletAddress={walletAddress}
             walletCurrency={walletCurrency}
           />
         </div>
