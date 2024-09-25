@@ -24,16 +24,15 @@ const WalletPopup: React.FC<WalletPopupProps> = ({
 
   return (
     <Popup open={isOpen} onClose={onClose} modal>
-      <div className="modal p-4 text-black text-center flex flex-col gap-y-4">
+      <div className="modal p-4 text-black text-center flex flex-col gap-y-4 w-full sm:w-auto max-w-lg">
         <div className="header text-lg font-bold">Wallet Details</div>
         <div className="content">
           <p className="py-1">Wallet Currency: {walletCurrency}</p>
           <p className="py-1">
-            Wallet Address: <br />{" "}
-            <span className="py-2 block">{walletAddress}</span>
+            Wallet Address: <br /> <p className="py-2">{walletAddress}</p>
             <button
               onClick={handleCopyAddress}
-              className="ml-2 bg-gray-200 p-1 rounded-full hover:bg-gray-300"
+              className="ml-2 bg-gray-200 py-2 px-4 rounded-md hover:bg-gray-300"
               title="Copy Address"
             >
               <FiCopy className="text-lg" />
@@ -46,7 +45,7 @@ const WalletPopup: React.FC<WalletPopupProps> = ({
         </div>
         <div className="actions">
           <button
-            className="bg-red-500 text-white px-4 py-2 rounded"
+            className="bg-red-500 text-white px-4 py-2 rounded-md border-none outline-none"
             onClick={onClose}
           >
             Close

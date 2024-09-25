@@ -21,6 +21,12 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "huobicfg.s3.amazonaws.com",
+        port: "",
+        pathname: "*/**",
+      },
     ],
   },
 };

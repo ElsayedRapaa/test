@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import HeaderBackButton from "@/components/header-back-button";
@@ -19,7 +20,7 @@ const coinImage: { [key: string]: string } = {
   eth: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
   bnb: "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png",
   usdt: "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png",
-  gbp: "https://assets.coingecko.com/coins/images/279/large/pound-symbol.png",
+  gbp: "https://huobicfg.s3.amazonaws.com/currency_icon/gbp.png",
 };
 
 const ProfilePage = () => {
@@ -28,6 +29,9 @@ const ProfilePage = () => {
   const [wallets, setWallets] = useState<Wallet[]>([]);
   const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [coinData, setCoinData] = useState<{ [key: string]: any }>({});
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const coins = ["btcusdt", "ethusdt", "bnbusdt", "usdtusdt", "gbpusdt"];
 
   useEffect(() => {
     if (status === "loading") return;
@@ -48,10 +52,39 @@ const ProfilePage = () => {
           console.error("Error fetching wallets:", error);
         }
       };
-
       fetchWallets();
     }
   }, [session, status, router]);
+
+  useEffect(() => {
+    const ws = new WebSocket("wss://stream.binance.com:9443/ws/!ticker@arr");
+
+    ws.onmessage = (event) => {
+      const updates = JSON.parse(event.data);
+      const newCoinData = { ...coinData };
+
+      updates.forEach((update: any) => {
+        const symbol = update.s.toLowerCase();
+        if (coins.includes(symbol)) {
+          newCoinData[symbol] = {
+            price: parseFloat(update.c),
+            priceChangePercentage24h: parseFloat(update.P),
+            volume: parseFloat(update.q),
+            high24h: parseFloat(update.h),
+            low24h: parseFloat(update.l),
+            name: symbol.replace("usdt", "").toUpperCase(),
+            image: coinImage[symbol] || "",
+          };
+        }
+      });
+
+      setCoinData(newCoinData);
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [coinData, coins]);
 
   if (status === "loading" || !session)
     return (
@@ -69,8 +102,6 @@ const ProfilePage = () => {
     setIsPopupOpen(false);
     setSelectedWallet(null);
   };
-
-  console.log(wallets.map((item) => item.currency));
 
   return (
     <div className="bg-gray-100 text-black">
@@ -102,7 +133,7 @@ const ProfilePage = () => {
                 className="border-y py-4 flex items-center justify-between cursor-pointer"
                 onClick={() => openPopup(wallet)}
               >
-                <div className="flex items-center gap-x-12">
+                <div className="flex items-center sm:gap-x-12 gap-x-4">
                   <Image
                     src={coinImage[wallet.currency.toLowerCase()]}
                     alt={wallet.currency}
@@ -111,14 +142,28 @@ const ProfilePage = () => {
                   />
                   <p>
                     {wallet.currency} <br />
-                    <span className="text-xs mt-2">USDT Coin</span>
+                    <span className="text-xs mt-2">USDT</span>
                   </p>
                 </div>
-                <p>
+                <p className="text-right">
                   US$ {wallet.balance} <br />
-                  <span className="text-xs mt-2">
-                    {wallet.balance} {wallet.currency}
-                  </span>
+                  {coinData[wallet.currency.toLowerCase() + "usdt"] && (
+                    <>
+                      <p className="text-sm pt-2">
+                        Price Coin: ${" "}
+                        {coinData[
+                          wallet.currency.toLowerCase() + "usdt"
+                        ].price.toFixed(2)}
+                      </p>
+                      <p className="text-sm pt-2">
+                        Total Price: ${" "}
+                        {wallet.balance *
+                          coinData[
+                            wallet.currency.toLowerCase() + "usdt"
+                          ].price.toFixed(0)}
+                      </p>
+                    </>
+                  )}
                 </p>
               </li>
             ))

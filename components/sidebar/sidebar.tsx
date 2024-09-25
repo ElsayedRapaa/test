@@ -24,10 +24,12 @@ const Sidebar = () => {
         top-0
         transition-transform
         duration-300
-        w-[320px]
+        sm:w-[320px]
+        w-[220px]
         bg-white
         shadow-lg
-        pl-8
+        sm:pl-8
+        pl-4
         pt-24
         z-50
         ${sidebar.isOpen ? "translate-x-0" : "-translate-x-full"}

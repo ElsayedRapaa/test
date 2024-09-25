@@ -11,7 +11,8 @@ const MainLinks = () => {
         flex
         items-center
         justify-between
-        px-4
+        sm:px-4
+        px-0
         pt-4
       "
     >

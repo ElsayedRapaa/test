@@ -29,7 +29,10 @@ export const LinksItems: React.FC<LinksItemsProps> = ({
       <h3
         className="
           text-black
-          font-bold
+          sm:font-bold
+          font-light
+          sm:text-xl
+          text-sm
         "
       >
         {title}

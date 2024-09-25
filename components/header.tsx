@@ -13,8 +13,7 @@ const Header = () => {
     <header
       className="
         flex
-        items-center
-        justify-between
+        flex-col
         bg-blue-600
         px-4
         pt-2
@@ -22,10 +21,20 @@ const Header = () => {
         rounded-b-3xl
       "
     >
-      <Wrapper />
-      <SidebarButton />
-      {session ? <></> : <LoginRegisterButton />}
-      <Sidebar />
+      <div className="flex items-center justify-between mb-4">
+        <Wrapper />
+        <SidebarButton />
+        {session ? <></> : <LoginRegisterButton />}
+        <Sidebar />
+      </div>
+      <div className="flex flex-col gap-y-2">
+        <h1 className="sm:text-5xl text-3xl font-light text-white">
+          MasterCoin
+        </h1>
+        <p className="sm:text-xl text-base text-white/40">
+          Start making money plans
+        </p>
+      </div>
     </header>
   );
 };

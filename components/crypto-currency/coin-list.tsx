@@ -120,7 +120,7 @@ const CoinList = () => {
               <div className="flex flex-col" key={coin}>
                 <Link
                   href={`/coin/${coin}`}
-                  className="px-4 py-2 grid grid-cols-3 hover:bg-gray-100 duration-200"
+                  className="sm:px-4 px-0 py-2 grid grid-cols-3 hover:bg-gray-100 duration-200"
                 >
                   <div className="flex items-center gap-x-4">
                     <Image
@@ -134,7 +134,7 @@ const CoinList = () => {
                       {coin.replace("usdt", "").toUpperCase()}
                     </h2>
                   </div>
-                  <h3 className="text-red-500 font-semibold ml-auto">
+                  <h3 className="text-red-500 font-semibold ml-auto sm:pr-0 pr-2">
                     {data.price > 100
                       ? data.price.toFixed(2)
                       : data.price.toFixed(8)}
