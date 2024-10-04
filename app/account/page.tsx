@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import photo01 from "./images/file01.png";
 import WalletPopup from "@/components/popup";
+import React from "react";
 
 interface Wallet {
   currency: string;

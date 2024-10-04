@@ -105,3 +105,21 @@ body {
     overflow-y: hidden;
   }
 }
+
+.custom-toast {
+  max-width: 500px !important;
+  width: 320px !important;
+  text-align: center !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.custom-progress-bar {
+  background-color: green !important;
+}
+
+.custom-toast-container {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}

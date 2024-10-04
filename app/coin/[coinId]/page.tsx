@@ -1,10 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import HeaderBackButton from "@/components/header-back-button";
-import useCoins from "@/hooks/use-coins";
-import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { useSession } from "next-auth/react";
+import Image from "next/image";
+
+import HeaderBackButton from "@/components/header-back-button";
+
+import Trading from "@/components/trading/trading";
+import WrapperTrading from "@/components/trading/wrapper";
+
+import useCoins from "@/hooks/use-coins";
+import useTrading from "@/hooks/use-trading";
 
 type CoinIdProps = {
   params: {
@@ -13,10 +20,16 @@ type CoinIdProps = {
 };
 
 const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
+  const { data: session } = useSession();
   const formattedCoinId = coinId.toUpperCase();
   const { coinData } = useCoins();
   const [isLoading, setIsLoading] = useState(true);
   const data = useMemo(() => coinData[coinId as string], [coinData, coinId]);
+  const trading = useTrading();
+
+  const openTrading = () => {
+    trading.onOpen();
+  };
 
   useEffect(() => {
     if (data) {
@@ -100,6 +113,34 @@ const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
           id="tradingview-chart"
           style={{ width: "90%", height: "500px" }}
         ></div>
+        <WrapperTrading />
+        {session ? (
+          <button
+            className="
+              bg-blue-600
+              text-white
+              block
+              sm:w-[60%]
+              w-full
+              sm:mx-auto
+              mx-4
+              mt-6
+              rounded-md
+              hover:bg-blue-700
+              duration-200
+              py-2
+              text-lg
+            "
+            onClick={openTrading}
+          >
+            Order
+          </button>
+        ) : (
+          <h1 className="mt-6 w-fit mx-auto text-black text-xl font-semibold">
+            Please Signin For Trade With Us ❤
+          </h1>
+        )}
+        {trading.isOpen && <Trading currency={data.name} image={data.image} />}
       </div>
     </section>
   );
