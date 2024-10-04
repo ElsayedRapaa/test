@@ -39,7 +39,7 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
   tradeState,
   setTradeState,
 }) => {
-  const [selectedValue, setSelectedValue] = useState<string>("10");
+  const [selectedValue, setSelectedValue] = useState<string>("60");
   const [amount, setAmount] = useState<number>(0);
   const [duration, setDuration] = useState(selectedValue);
   const [tradeOpen, setTradeOpen] = useState<boolean>(false);
@@ -109,6 +109,7 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
           autoClose: 5000,
           progressClassName: "custom-progress-bar",
           className: "custom-toast",
+          pauseOnFocusLoss: false,
         }
       );
     } else if (amount > 0) {
@@ -146,6 +147,7 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
           onClose: () => setShowDiv(true),
           progressClassName: "custom-progress-bar",
           className: "custom-toast",
+          pauseOnFocusLoss: false,
         }
       );
       setTradeOpen(true);
@@ -207,7 +209,7 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
               <SelectValue placeholder={selectedValue} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="10">60S</SelectItem>
+              <SelectItem value="60">60S</SelectItem>
               <SelectItem value="120">120S</SelectItem>
               <SelectItem value="300">300S</SelectItem>
               <SelectItem value="10000">10M</SelectItem>

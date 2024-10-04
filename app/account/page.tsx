@@ -105,7 +105,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="bg-gray-100 text-black">
+    <div className="bg-gray-100 text-black min-h-full">
       <HeaderBackButton />
       <div className="px-4 py-2">
         <div className="flex items-center justify-between">
