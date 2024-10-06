@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import photo01 from "./images/file01.png";
 import WalletPopup from "@/components/popup";
 import React from "react";
+import Link from "next/link";
 
 interface Wallet {
   currency: string;
@@ -124,7 +125,14 @@ const ProfilePage = () => {
           <h2 className="text-xl font-bold">{session?.user?.username}</h2>
         </div>
         <p className="py-2 text-xl font-bold">Email: {session?.user?.email}</p>
-
+        {session?.user?.role === "admin" && (
+          <Link
+            href="/dashboard"
+            className="text-white bg-blue-600 block w-fit px-2 py-1 rounded-md"
+          >
+            Go To Dashboard
+          </Link>
+        )}
         <h3 className="text-xl font-bold py-2">Wallets</h3>
         <ul className="pt-4 pb-12">
           {wallets.length > 0 ? (
