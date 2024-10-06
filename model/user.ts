@@ -24,6 +24,7 @@ export interface User extends Document {
   isAcceptingMessage: boolean;
   wallets: Wallet[];
   transactionHistory: Transaction[];
+  role: "admin" | "user";
 }
 
 const WalletSchema: Schema<Wallet> = new Schema({
@@ -82,6 +83,7 @@ const UserSchema: Schema<User> = new Schema({
   },
   wallets: [WalletSchema],
   transactionHistory: { type: [TransactionSchema], default: [] },
+  role: { type: String, enum: ["admin", "user"], default: "user" },
 });
 
 UserSchema.pre("save", function (next) {

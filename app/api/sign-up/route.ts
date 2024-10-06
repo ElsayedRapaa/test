@@ -57,6 +57,7 @@ export async function POST(request: NextRequest) {
         verifyCodeExpiry: expiryDate,
         isVerify: false,
         isAcceptingMessages: true,
+        role: "user",
       });
 
       await newUser.save();
