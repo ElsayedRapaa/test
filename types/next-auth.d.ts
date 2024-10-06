@@ -19,6 +19,7 @@ declare module "next-auth" {
       amount: number;
       date: Date;
     }[];
+    role: "admin" | "user";
   }
 
   interface Session {
@@ -40,6 +41,7 @@ declare module "next-auth" {
         amount: number;
         date: Date;
       }[];
+      role: "admin" | "user";
     } & DefaultSession["user"];
   }
 }
@@ -62,5 +64,6 @@ declare module "next-auth/jwt" {
       amount: number;
       date: Date;
     }[];
+    role: "admin" | "user";
   }
 }

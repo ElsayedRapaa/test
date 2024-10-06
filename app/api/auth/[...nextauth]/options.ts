@@ -50,6 +50,7 @@ export const authOptions: AuthOptions = {
             isAcceptingMessages: user.isAcceptingMessage,
             wallets: user.wallets,
             transactionHistory: user.transactionHistory,
+            role: user.role,
           };
         } catch (error: any) {
           throw new Error(error);
@@ -61,26 +62,26 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id?.toString();
-        // token.username = user.username;
         token.verifyCode = user.verifyCode;
         token.isVerify = user.isVerify;
         token.isAcceptingMessages = user.isAcceptingMessages;
         token.username = user.username;
         token.wallets = user.wallets;
         token.transactionHistory = user.transactionHistory;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user._id = token._id;
-        // session.user.email = token.email || "";
         session.user.verifyCode = token.verifyCode;
         session.user.isVerify = token.isVerify;
         session.user.isAcceptingMessages = token.isAcceptingMessages;
         session.user.username = token.username;
         session.user.wallets = token.wallets;
         session.user.transactionHistory = token.transactionHistory;
+        session.user.role = token.role;
       }
       return session;
     },
