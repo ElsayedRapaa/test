@@ -13,7 +13,7 @@ export const mainLinks = [
   {
     id: 2,
     title: "Withdraw coins",
-    href: "/account",
+    href: "/transfer",
     icon: HiMiniFolderArrowDown,
   },
   {
