@@ -83,55 +83,64 @@ const Dashboard = () => {
     }
   };
 
+  const updateUserRole = async (userId: string, newRole: string) => {
+    try {
+      const response = await fetch(`/api/dashboard`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          role: newRole,
+        }),
+      });
+      const updatedUsers = await fetch("/api/dashboard");
+      setUsers(await updatedUsers.json());
+    } catch (error) {
+      console.error("Error updating role:", error);
+    }
+  };
+
   return (
     <div className="bg-white text-black p-4">
-      <h1>Dashboard</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Username</th>
-            <th>Wallets</th>
-            <th>Role</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user._id} className="border-2 border-black">
-              <td>{user.username}</td>
-              <td>
-                <ul>
-                  {user.wallets.map((wallet) => (
-                    <li key={wallet.currency}>
-                      <p>Currency: {wallet.currency}</p>
-                      <p>Balance: {wallet.balance}</p>
-                      <p>Address: {wallet.address}</p>
-                      <input
-                        className="border-2 border-black p-2 rounded-md"
-                        type="text"
-                        placeholder="New Address"
-                        onChange={(e) =>
-                          setWalletUpdates((prev) => ({
-                            ...prev,
-                            [wallet.currency]: e.target.value,
-                          }))
-                        }
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </td>
-              <td>
-                <select
-                  value={newRole}
-                  onChange={(e) => setNewRole(e.target.value)}
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </td>
-              <td>
+      <h1 className="text-lg font-semibold mb-4">Dashboard</h1>
+      {users.map((user) => (
+        <div
+          key={user._id}
+          className="mb-8 p-4 border rounded-md shadow-md bg-gray-50"
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">{user.username}</h2>
+            <p className="text-sm font-medium">
+              {user.role === "admin" ? "Admin" : "User"}
+            </p>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Wallet Addresses</h3>
+            {user.wallets.map((wallet) => (
+              <div key={wallet.currency} className="mb-4">
+                <label className="block mb-1 font-medium">
+                  {wallet.currency} Address
+                </label>
+                <input
+                  className="border border-gray-300 p-2 rounded-md w-full mb-2"
+                  type="text"
+                  value={wallet.address}
+                  placeholder={`${wallet.currency} Address`}
+                  readOnly
+                />
+                <input
+                  className="border border-gray-300 p-2 rounded-md w-full mb-2"
+                  type="text"
+                  placeholder={`New ${wallet.currency} Address`}
+                  onChange={(e) =>
+                    setWalletUpdates((prev) => ({
+                      ...prev,
+                      [wallet.currency]: e.target.value,
+                    }))
+                  }
+                />
                 <button
+                  className="bg-blue-600 text-white px-4 py-2 rounded-md"
                   onClick={() => {
                     setSelectedUserId(user._id);
                     updateAddress();
@@ -139,32 +148,56 @@ const Dashboard = () => {
                 >
                   Update Address
                 </button>
-
-                <input
-                  className="border-2 border-black p-2 rounded-md"
-                  type="text"
-                  placeholder="Currency"
-                  onChange={(e) => setCurrency(e.target.value)}
-                />
-                <input
-                  className="border-2 border-black p-2 rounded-md"
-                  type="number"
-                  placeholder="Amount"
-                  onChange={(e) => setAmount(Number(e.target.value))}
-                />
-                <button
-                  onClick={() => {
-                    setSelectedUserId(user._id);
-                    addFunds();
-                  }}
-                >
-                  Add Funds
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+              </div>
+            ))}
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Add Funds</h3>
+            <div className="mb-4">
+              <input
+                className="border border-gray-300 p-2 rounded-md w-full mb-2"
+                type="text"
+                placeholder="Currency"
+                onChange={(e) => setCurrency(e.target.value)}
+              />
+              <input
+                className="border border-gray-300 p-2 rounded-md w-full mb-2"
+                type="number"
+                placeholder="Amount"
+                onChange={(e) => setAmount(Number(e.target.value))}
+              />
+              <button
+                className="bg-green-600 text-white px-4 py-2 rounded-md"
+                onClick={() => {
+                  setSelectedUserId(user._id);
+                  addFunds();
+                }}
+              >
+                Add Funds
+              </button>
+            </div>
+          </div>
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Change Role</h3>
+            <div className="mb-4">
+              <select
+                className="border border-gray-300 p-2 rounded-md w-full mb-2"
+                value={user.role}
+                onChange={(e) => setNewRole(e.target.value)}
+              >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+              <button
+                className="bg-purple-600 text-white px-4 py-2 rounded-md"
+                onClick={() => updateUserRole(user._id, newRole)}
+              >
+                Change Role
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
