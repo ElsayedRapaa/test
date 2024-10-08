@@ -1,5 +1,6 @@
 "use client";
 
+import HeaderBackButton from "@/components/header-back-button";
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from "react";
 
@@ -101,7 +102,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-white text-black p-4">
+    <div className="bg-white text-black pb-4">
+      <HeaderBackButton />
       <h1 className="text-lg font-semibold mb-4">Dashboard</h1>
       {users.map((user) => (
         <div

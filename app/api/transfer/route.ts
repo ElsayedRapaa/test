@@ -5,6 +5,7 @@ import db from "@/lib/db";
 import crypto from "crypto";
 
 interface TransferRequestBody {
+  userId: string;
   currency: string;
   amount: number;
 }
@@ -12,8 +13,7 @@ interface TransferRequestBody {
 export async function POST(req: NextRequest) {
   await db();
 
-  const { currency, amount }: TransferRequestBody = await req.json();
-  const userId = req.headers.get("userid");
+  const { userId, currency, amount }: TransferRequestBody = await req.json();
 
   if (!userId) {
     return NextResponse.json(

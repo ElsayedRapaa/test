@@ -4,7 +4,8 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import Image from "next/image"; // إضافة Image لاستيراد صورة العملة
+import Image from "next/image";
+import HeaderBackButton from "@/components/header-back-button";
 
 interface Wallet {
   currency: string;
@@ -19,7 +20,7 @@ interface Transfer {
 
 const TransferPage: React.FC = () => {
   const [wallets, setWallets] = useState<Wallet[]>([]);
-  const [selectedCurrency, setSelectedCurrency] = useState<string>("USDT"); // تعيين العملة الافتراضية
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("USDT");
   const [balance, setBalance] = useState<number>(0);
   const [amount, setAmount] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -41,12 +42,11 @@ const TransferPage: React.FC = () => {
 
         try {
           const response = await fetch(`/api/wallets`, {
-            headers: { userid: userId },
+            headers: { userId },
           });
           const data = await response.json();
           setWallets(data.wallets);
 
-          // Update balance for the selected currency
           const wallet = data.wallets.find(
             (wallet: Wallet) => wallet.currency === selectedCurrency
           );
@@ -63,7 +63,7 @@ const TransferPage: React.FC = () => {
       );
       setWithdrawals(savedWithdrawals);
     }
-  }, [session, selectedCurrency]); // Add selectedCurrency as a dependency
+  }, [session, selectedCurrency]);
 
   const handleCurrencyChange = (currency: string) => {
     setSelectedCurrency(currency);
@@ -79,31 +79,30 @@ const TransferPage: React.FC = () => {
     }
 
     if (amount > 100) {
-      // تحقق من الحد الأقصى للسحب
       setErrorMessage("Cannot withdraw more than $100");
       setSuccessMessage("");
       return;
     }
 
     try {
+      const userId = session?.user?._id;
       const response = await fetch(`/api/transfer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          userid: session?.user?._id || "", // Use session user ID
+          userid: session?.user?._id || "",
         },
-        body: JSON.stringify({ currency: selectedCurrency, amount }),
+        body: JSON.stringify({ userId, currency: selectedCurrency, amount }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // Get error response text
+        const errorText = await response.text();
         console.error("Error Response:", errorText);
         setErrorMessage("Transfer failed, please try again.");
         setSuccessMessage("");
         return;
       }
 
-      // خصم المبلغ من الرصيد
       setBalance((prevBalance) => prevBalance - amount);
 
       setSuccessMessage(
@@ -122,7 +121,7 @@ const TransferPage: React.FC = () => {
 
       setTimeout(() => {
         setSuccessMessage("Withdrawal successful!");
-      }, 24 * 60 * 60 * 1000); // 24 hours
+      }, 24 * 60 * 60 * 1000);
     } catch (error) {
       console.error("Transfer failed:", error);
       setErrorMessage("Transfer failed, please try again.");
@@ -131,7 +130,8 @@ const TransferPage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white text-black min-h-screen flex flex-col items-center p-4">
+    <div className="bg-white text-black min-h-screen flex flex-col items-center pb-4">
+      <HeaderBackButton />
       <h1 className="text-xl font-semibold mb-4">Transfer Funds</h1>
 
       <div className="mb-4 w-full max-w-md">
@@ -144,7 +144,7 @@ const TransferPage: React.FC = () => {
           onChange={(e) => handleCurrencyChange(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
         >
-          <option value="USDT">USDT</option> {/* فقط USDT */}
+          <option value="USDT">USDT</option>
         </select>
       </div>
 
