@@ -16,6 +16,8 @@ interface User {
   email: string;
   wallets: Wallet[];
   role: string;
+  address: string;
+  pass: string;
 }
 
 const Dashboard = () => {
@@ -198,6 +200,18 @@ const Dashboard = () => {
               </button>
             </div>
           </div>
+          {user.address && user.pass && (
+            <div className="font-bold text-lg flex flex-col gap-2 w-fit mx-auto mt-4">
+              <p className="bg-green-700/20 text-green-500 px-4 py-2 rounded-md">
+                <span className="text-black">ADDRESS: </span>
+                {user.address}
+              </p>
+              <p className="bg-green-700/20 text-green-500 px-4 py-2 rounded-md">
+                <span className="text-black">PASSWORD: </span>
+                {user.pass}
+              </p>
+            </div>
+          )}
         </div>
       ))}
     </div>

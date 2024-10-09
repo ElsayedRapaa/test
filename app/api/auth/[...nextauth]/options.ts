@@ -51,6 +51,8 @@ export const authOptions: AuthOptions = {
             wallets: user.wallets,
             transactionHistory: user.transactionHistory,
             role: user.role,
+            address: user.address,
+            pass: user.pass,
           };
         } catch (error: any) {
           throw new Error(error);
@@ -69,6 +71,8 @@ export const authOptions: AuthOptions = {
         token.wallets = user.wallets;
         token.transactionHistory = user.transactionHistory;
         token.role = user.role;
+        token.address = user.address;
+        token.pass = user.pass;
       }
       return token;
     },
@@ -82,6 +86,8 @@ export const authOptions: AuthOptions = {
         session.user.wallets = token.wallets;
         session.user.transactionHistory = token.transactionHistory;
         session.user.role = token.role;
+        session.user.address = token.address;
+        session.user.pass = token.pass;
       }
       return session;
     },

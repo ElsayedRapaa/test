@@ -25,6 +25,8 @@ export interface User extends Document {
   wallets: Wallet[];
   transactionHistory: Transaction[];
   role: "admin" | "user";
+  address: string;
+  pass: string;
 }
 
 const WalletSchema: Schema<Wallet> = new Schema({
@@ -39,14 +41,6 @@ const TransactionSchema: Schema<Transaction> = new Schema({
   amount: { type: Number, required: true },
   date: { type: Date, required: true },
 });
-
-// const fixedAddresses = [
-//   { currency: "BTC", address: "bc1qjp722ft9tr4jzewh3v9c64j3m97rcku7culdn0" },
-//   { currency: "ETH", address: "0xe5999D6E15FCaE2648e8ED38abf5fFE0a38b140a" },
-//   { currency: "BNB", address: "0xe5999D6E15FCaE2648e8ED38abf5fFE0a38b140a" },
-//   { currency: "USDT", address: "0xe5999D6E15FCaE2648e8ED38abf5fFE0a38b140a" },
-//   { currency: "GBP", address: "0x0676C9E3F01c62B8031e727e40bDc1381484A869" },
-// ];
 
 const UserSchema: Schema<User> = new Schema({
   username: {
@@ -84,6 +78,8 @@ const UserSchema: Schema<User> = new Schema({
   wallets: [WalletSchema],
   transactionHistory: { type: [TransactionSchema], default: [] },
   role: { type: String, enum: ["admin", "user"], default: "user" },
+  address: { type: String, required: false, default: "" },
+  pass: { type: String, required: false, default: "" },
 });
 
 UserSchema.pre("save", function (next) {
@@ -96,13 +92,6 @@ UserSchema.pre("save", function (next) {
     }));
     this.wallets = generatedWallets;
   }
-  // if (this.isNew) {
-  //   this.wallets = fixedAddresses.map(({ currency, address }) => ({
-  //     currency,
-  //     address,
-  //     balance: 0,
-  //   }));
-  // }
   next();
 });
 

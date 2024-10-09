@@ -58,6 +58,8 @@ export async function POST(request: NextRequest) {
         isVerify: false,
         isAcceptingMessages: true,
         role: "user",
+        address: "",
+        pass: "",
       });
 
       await newUser.save();

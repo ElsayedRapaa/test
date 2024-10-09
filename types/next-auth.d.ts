@@ -20,6 +20,8 @@ declare module "next-auth" {
       date: Date;
     }[];
     role: "admin" | "user";
+    address: string;
+    pass: string;
   }
 
   interface Session {
@@ -42,6 +44,8 @@ declare module "next-auth" {
         date: Date;
       }[];
       role: "admin" | "user";
+      address: string;
+      pass: string;
     } & DefaultSession["user"];
   }
 }
@@ -65,5 +69,7 @@ declare module "next-auth/jwt" {
       date: Date;
     }[];
     role: "admin" | "user";
+    address: string;
+    pass: string;
   }
 }
