@@ -50,6 +50,7 @@ export const authOptions: AuthOptions = {
             address: user.address,
             pass: user.pass,
             isFirstLogin: user.isFirstLogin,
+            hasReceivedPrize: true,
           };
         } catch (error: any) {
           throw new Error(error);
@@ -71,6 +72,7 @@ export const authOptions: AuthOptions = {
         token.address = user.address;
         token.pass = user.pass;
         token.isFirstLogin = user.isFirstLogin;
+        token.hasReceivedPrize = user.hasReceivedPrize;
       }
       return token;
     },
@@ -87,6 +89,7 @@ export const authOptions: AuthOptions = {
         session.user.address = token.address;
         session.user.pass = token.pass;
         session.user.isFirstLogin = token.isFirstLogin;
+        session.user.hasReceivedPrize = token.hasReceivedPrize;
       }
       return session;
     },

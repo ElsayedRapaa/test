@@ -46,6 +46,7 @@ export async function GET(req: NextRequest) {
       } else {
         usdtWallet.balance += prizeAmount;
       }
+      user.hasReceivedPrize = true;
       await user.save();
     }
 

@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
         address: "",
         pass: "",
         isFirstLogin: true,
+        hasReceivedPrize: true,
       });
 
       await newUser.save();

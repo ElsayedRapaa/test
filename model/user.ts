@@ -28,6 +28,7 @@ export interface User extends Document {
   address: string;
   pass: string;
   isFirstLogin: boolean;
+  hasReceivedPrize: boolean;
 }
 
 const WalletSchema: Schema<Wallet> = new Schema({
@@ -82,6 +83,10 @@ const UserSchema: Schema<User> = new Schema({
   address: { type: String, required: false, default: "" },
   pass: { type: String, required: false, default: "" },
   isFirstLogin: {
+    type: Boolean,
+    default: true,
+  },
+  hasReceivedPrize: {
     type: Boolean,
     default: true,
   },
