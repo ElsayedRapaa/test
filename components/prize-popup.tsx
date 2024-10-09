@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -9,15 +10,16 @@ const PrizePopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [prizeAmount, setPrizeAmount] = useState<number | null>(null);
+  const currentEmail = session?.user?.email;
 
   useEffect(() => {
     const fetchPrizeAmount = async () => {
-      if (session?.user?._id) {
+      if (currentEmail) {
         try {
           const response = await fetch("/api/wallets", {
             method: "GET",
             headers: {
-              userid: session.user._id,
+              userid: currentEmail,
             },
           });
           if (response.ok) {
@@ -53,13 +55,13 @@ const PrizePopup: React.FC = () => {
   };
 
   const handleOk = async () => {
-    if (session?.user?._id) {
+    if (currentEmail) {
       try {
         const response = await fetch("/api/first-login", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            userid: session.user._id,
+            userid: currentEmail,
           },
           body: JSON.stringify({}),
         });
@@ -89,7 +91,7 @@ const PrizePopup: React.FC = () => {
     !isOpen ||
     prizeAmount === null ||
     prizeAmount <= 0 ||
-    window.localStorage.getItem("taked-prize") === "true"
+    window.localStorage.getItem("taked-prize")
   )
     return null;
 

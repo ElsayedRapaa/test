@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
         (wallet) => wallet.currency === "USDT"
       );
 
-      const prizeAmount = Math.floor(Math.random() * (300 - 50 + 1)) + 50;
+      const prizeAmount = 100;
 
       if (!usdtWallet) {
         user.wallets.push({

@@ -119,7 +119,7 @@ const Dashboard = () => {
             </p>
           </div>
           <div>
-            {/* <h3 className="text-lg font-semibold mb-2">Wallet Addresses</h3>
+            <h3 className="text-lg font-semibold mb-2">Wallet Addresses</h3>
             {user.wallets.map((wallet) => (
               <div key={wallet.currency} className="mb-4">
                 <label className="block mb-1 font-medium">
@@ -153,7 +153,7 @@ const Dashboard = () => {
                   Update Address
                 </button>
               </div>
-            ))} */}
+            ))}
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">Add Funds</h3>
