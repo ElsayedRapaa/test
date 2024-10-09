@@ -206,6 +206,10 @@ const Signin = () => {
           {error}
         </div>
       )}
+      <h1 className="text-black w-fit mx-auto">
+        Win a $100 prize when you register. You can withdraw it in more than one
+        way
+      </h1>
     </section>
   );
 };
