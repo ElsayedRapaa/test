@@ -88,7 +88,7 @@ const UserSchema: Schema<User> = new Schema({
   },
   hasReceivedPrize: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 

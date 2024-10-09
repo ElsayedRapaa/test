@@ -6,15 +6,14 @@ import crypto from "crypto";
 export async function GET(req: NextRequest) {
   await db();
 
-  const userId = req.headers.get("userid");
-
-  if (!userId) {
-    return new Response(JSON.stringify({ message: "User ID not provided" }), {
-      status: 400,
-    });
-  }
-
   try {
+    const userId = req.headers.get("userid");
+
+    if (!userId) {
+      return new Response(JSON.stringify({ message: "User ID not provided" }), {
+        status: 400,
+      });
+    }
     const user = await UserModel.findById(userId);
 
     if (!user) {
@@ -37,14 +36,8 @@ export async function GET(req: NextRequest) {
 
       const prizeAmount = 100;
 
-      if (!usdtWallet) {
-        user.wallets.push({
-          currency: "USDT",
-          balance: prizeAmount,
-          address: crypto.randomBytes(20).toString("hex"),
-        });
-      } else {
-        usdtWallet.balance += prizeAmount;
+      if (usdtWallet) {
+        usdtWallet.balance = prizeAmount;
       }
       user.hasReceivedPrize = true;
       await user.save();

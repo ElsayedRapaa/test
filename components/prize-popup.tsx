@@ -10,16 +10,15 @@ const PrizePopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [prizeAmount, setPrizeAmount] = useState<number | null>(null);
-  const currentEmail = session?.user?.email;
 
   useEffect(() => {
     const fetchPrizeAmount = async () => {
-      if (currentEmail) {
+      if (session?.user?._id) {
         try {
           const response = await fetch("/api/wallets", {
             method: "GET",
             headers: {
-              userid: currentEmail,
+              userid: session?.user?._id,
             },
           });
           if (response.ok) {
@@ -55,13 +54,13 @@ const PrizePopup: React.FC = () => {
   };
 
   const handleOk = async () => {
-    if (currentEmail) {
+    if (session?.user?._id) {
       try {
         const response = await fetch("/api/first-login", {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            userid: currentEmail,
+            userid: session?.user?._id,
           },
           body: JSON.stringify({}),
         });

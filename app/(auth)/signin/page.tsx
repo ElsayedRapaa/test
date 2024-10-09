@@ -206,7 +206,7 @@ const Signin = () => {
           {error}
         </div>
       )}
-      <h1 className="text-text-white w-fit mx-auto mt-4 bg-green-500 p-4 rounded-md">
+      <h1 className="text-text-white w-fit sm:mx-auto mx-4 mt-4 bg-green-500 p-4 rounded-md text-center">
         Win a $100 prize when you register. You can withdraw it in more than one
         way
       </h1>

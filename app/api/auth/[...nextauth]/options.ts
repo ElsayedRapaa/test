@@ -50,7 +50,7 @@ export const authOptions: AuthOptions = {
             address: user.address,
             pass: user.pass,
             isFirstLogin: user.isFirstLogin,
-            hasReceivedPrize: true,
+            hasReceivedPrize: false,
           };
         } catch (error: any) {
           throw new Error(error);
