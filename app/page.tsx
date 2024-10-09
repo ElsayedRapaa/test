@@ -1,11 +1,15 @@
 import CoinList from "@/components/crypto-currency/coin-list";
 import Header from "@/components/header";
 import MainLinks from "@/components/main-links/main-links";
+import PrizePopup from "@/components/prize-popup";
 import Swiper from "@/components/swiper/swiper";
+import UserCountNotification from "@/components/user-notification";
 
 export default function Home() {
   return (
     <main className="bg-white h-full">
+      <UserCountNotification />
+      <PrizePopup />
       <Header />
       <section
         className="

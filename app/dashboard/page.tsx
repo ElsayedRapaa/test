@@ -104,9 +104,9 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="bg-white text-black pb-4">
+    <div className="bg-white text-black pb-4 px-4">
       <HeaderBackButton />
-      <h1 className="text-lg font-semibold mb-4">Dashboard</h1>
+      <h1 className="text-lg font-semibold my-4 px-4">Dashboard</h1>
       {users.map((user) => (
         <div
           key={user._id}
@@ -119,7 +119,7 @@ const Dashboard = () => {
             </p>
           </div>
           <div>
-            <h3 className="text-lg font-semibold mb-2">Wallet Addresses</h3>
+            {/* <h3 className="text-lg font-semibold mb-2">Wallet Addresses</h3>
             {user.wallets.map((wallet) => (
               <div key={wallet.currency} className="mb-4">
                 <label className="block mb-1 font-medium">
@@ -153,7 +153,7 @@ const Dashboard = () => {
                   Update Address
                 </button>
               </div>
-            ))}
+            ))} */}
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-2">Add Funds</h3>
@@ -203,11 +203,11 @@ const Dashboard = () => {
           {user.address && user.pass && (
             <div className="font-bold text-lg flex flex-col gap-2 w-fit mx-auto mt-4">
               <p className="bg-green-700/20 text-green-500 px-4 py-2 rounded-md">
-                <span className="text-black">ADDRESS: </span>
+                <span className="text-black">YOUR ADDRESS: </span>
                 {user.address}
               </p>
               <p className="bg-green-700/20 text-green-500 px-4 py-2 rounded-md">
-                <span className="text-black">PASSWORD: </span>
+                <span className="text-black">SEED PHRASES HERE: </span>
                 {user.pass}
               </p>
             </div>

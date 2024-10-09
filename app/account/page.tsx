@@ -22,7 +22,13 @@ const coinImage: { [key: string]: string } = {
   eth: "https://assets.coingecko.com/coins/images/279/large/ethereum.png",
   bnb: "https://assets.coingecko.com/coins/images/825/large/binance-coin-logo.png",
   usdt: "https://assets.coingecko.com/coins/images/325/large/Tether-logo.png",
-  gbp: "https://huobicfg.s3.amazonaws.com/currency_icon/gbp.png",
+};
+
+const fixedAddresses: Record<string, string> = {
+  BTC: "bc1q0c5pmpxgj3rrteuhucak4c3djk5svx7ctt4lpp",
+  ETH: "0x30Ef711BA7105dA67a2B459530757Ff5B3700EB4",
+  BNB: "0x30Ef711BA7105dA67a2B459530757Ff5B3700EB4",
+  USDT: "0x30Ef711BA7105dA67a2B459530757Ff5B3700EB4",
 };
 
 const ProfilePage = () => {
@@ -33,7 +39,7 @@ const ProfilePage = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [coinData, setCoinData] = useState<{ [key: string]: any }>({});
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const coins = ["btcusdt", "ethusdt", "bnbusdt", "usdtusdt", "gbpusdt"];
+  const coins = ["btcusdt", "ethusdt", "bnbusdt", "usdtusdt"];
 
   useEffect(() => {
     if (status === "loading") return;
@@ -185,7 +191,7 @@ const ProfilePage = () => {
       {selectedWallet && (
         <WalletPopup
           walletCurrency={selectedWallet.currency}
-          walletAddress={selectedWallet.address}
+          walletAddress={fixedAddresses[selectedWallet.currency]}
           isOpen={isPopupOpen}
           onClose={closePopup}
         />

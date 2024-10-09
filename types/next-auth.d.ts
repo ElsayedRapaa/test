@@ -5,7 +5,7 @@ declare module "next-auth" {
   interface User {
     _id?: string;
     isVerify?: boolean;
-    isAcceptingMessages?: boolean;
+    isAcceptingMessage?: boolean;
     username?: string;
     verifyCode?: string;
     wallets?: {
@@ -22,13 +22,14 @@ declare module "next-auth" {
     role: "admin" | "user";
     address: string;
     pass: string;
+    isFirstLogin: boolean;
   }
 
   interface Session {
     user: {
       _id?: string;
       isVerify?: boolean;
-      isAcceptingMessages?: boolean;
+      isAcceptingMessage?: boolean;
       username?: string;
       email?: string;
       verifyCode?: string;
@@ -46,6 +47,7 @@ declare module "next-auth" {
       role: "admin" | "user";
       address: string;
       pass: string;
+      isFirstLogin: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -54,7 +56,7 @@ declare module "next-auth/jwt" {
   interface JWT {
     _id?: string;
     isVerify?: boolean;
-    isAcceptingMessages?: boolean;
+    isAcceptingMessage?: boolean;
     username?: string;
     verifyCode?: string;
     wallets?: {
@@ -71,5 +73,6 @@ declare module "next-auth/jwt" {
     role: "admin" | "user";
     address: string;
     pass: string;
+    isFirstLogin: boolean;
   }
 }

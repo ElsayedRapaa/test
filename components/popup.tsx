@@ -32,10 +32,9 @@ const WalletPopup: React.FC<WalletPopupProps> = ({
             Wallet Address: <br /> <p className="py-2">{walletAddress}</p>
             <button
               onClick={handleCopyAddress}
-              className="ml-2 bg-gray-200 py-2 px-4 rounded-md hover:bg-gray-300"
-              title="Copy Address"
+              className="ml-2 bg-gray-200 py-2 px-3 rounded-md"
             >
-              <FiCopy className="text-lg" />
+              <FiCopy className="inline" /> Copy Address
             </button>
           </p>
           <QRCodeAdd
@@ -45,7 +44,7 @@ const WalletPopup: React.FC<WalletPopupProps> = ({
         </div>
         <div className="actions">
           <button
-            className="bg-red-500 text-white px-4 py-2 rounded-md border-none outline-none"
+            className="bg-blue-600 text-white px-4 py-2 rounded-md"
             onClick={onClose}
           >
             Close

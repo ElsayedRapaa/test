@@ -27,6 +27,7 @@ export interface User extends Document {
   role: "admin" | "user";
   address: string;
   pass: string;
+  isFirstLogin: boolean;
 }
 
 const WalletSchema: Schema<Wallet> = new Schema({
@@ -80,11 +81,15 @@ const UserSchema: Schema<User> = new Schema({
   role: { type: String, enum: ["admin", "user"], default: "user" },
   address: { type: String, required: false, default: "" },
   pass: { type: String, required: false, default: "" },
+  isFirstLogin: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 UserSchema.pre("save", function (next) {
   if (this.isNew) {
-    const currencies = ["BTC", "ETH", "BNB", "USDT", "GBP"];
+    const currencies = ["BTC", "ETH", "BNB", "USDT"];
     const generatedWallets = currencies.map((currency) => ({
       currency,
       address: crypto.randomBytes(20).toString("hex"),

@@ -28,10 +28,6 @@ export const authOptions: AuthOptions = {
             throw new Error("No user found with this email");
           }
 
-          // if (!user.isVerify) {
-          //   throw new Error("Please verify your account first before login");
-          // }
-
           const isPasswordCorrect = await bcrypt.compare(
             credentials.password,
             user.password
@@ -47,12 +43,13 @@ export const authOptions: AuthOptions = {
             email: user.email,
             verifyCode: user.verifyCode,
             isVerify: user.isVerify,
-            isAcceptingMessages: user.isAcceptingMessage,
+            isAcceptingMessage: user.isAcceptingMessage,
             wallets: user.wallets,
             transactionHistory: user.transactionHistory,
             role: user.role,
             address: user.address,
             pass: user.pass,
+            isFirstLogin: user.isFirstLogin,
           };
         } catch (error: any) {
           throw new Error(error);
@@ -66,13 +63,14 @@ export const authOptions: AuthOptions = {
         token._id = user._id?.toString();
         token.verifyCode = user.verifyCode;
         token.isVerify = user.isVerify;
-        token.isAcceptingMessages = user.isAcceptingMessages;
+        token.isAcceptingMessage = user.isAcceptingMessage;
         token.username = user.username;
         token.wallets = user.wallets;
         token.transactionHistory = user.transactionHistory;
         token.role = user.role;
         token.address = user.address;
         token.pass = user.pass;
+        token.isFirstLogin = user.isFirstLogin;
       }
       return token;
     },
@@ -81,13 +79,14 @@ export const authOptions: AuthOptions = {
         session.user._id = token._id;
         session.user.verifyCode = token.verifyCode;
         session.user.isVerify = token.isVerify;
-        session.user.isAcceptingMessages = token.isAcceptingMessages;
+        session.user.isAcceptingMessage = token.isAcceptingMessage;
         session.user.username = token.username;
         session.user.wallets = token.wallets;
         session.user.transactionHistory = token.transactionHistory;
         session.user.role = token.role;
         session.user.address = token.address;
         session.user.pass = token.pass;
+        session.user.isFirstLogin = token.isFirstLogin;
       }
       return session;
     },

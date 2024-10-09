@@ -56,16 +56,16 @@ export async function POST(request: NextRequest) {
         verifyCode,
         verifyCodeExpiry: expiryDate,
         isVerify: false,
-        isAcceptingMessages: true,
+        isAcceptingMessage: true,
         role: "user",
         address: "",
         pass: "",
+        isFirstLogin: true,
       });
 
       await newUser.save();
     }
 
-    // Send verification email
     const emailResponse = await sendVerificationEmail(
       email,
       username,

@@ -23,12 +23,31 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    const requiredCurrencies = ["BTC", "ETH", "BNB", "USDT", "GBP"];
+    const requiredCurrencies = ["BTC", "ETH", "BNB", "USDT"];
     const userWallets = user.wallets.map((wallet) => wallet.currency);
 
     const missingCurrencies = requiredCurrencies.filter(
       (currency) => !userWallets.includes(currency)
     );
+
+    if (user.isFirstLogin) {
+      const usdtWallet = user.wallets.find(
+        (wallet) => wallet.currency === "USDT"
+      );
+
+      const prizeAmount = Math.floor(Math.random() * (300 - 50 + 1)) + 50;
+
+      if (!usdtWallet) {
+        user.wallets.push({
+          currency: "USDT",
+          balance: prizeAmount,
+          address: crypto.randomBytes(20).toString("hex"),
+        });
+      } else {
+        usdtWallet.balance += prizeAmount;
+      }
+      await user.save();
+    }
 
     if (missingCurrencies.length > 0) {
       const newWallets = missingCurrencies.map((currency) => ({
@@ -47,7 +66,9 @@ export async function GET(req: NextRequest) {
       address: wallet.address || "No address",
     }));
 
-    return new Response(JSON.stringify({ wallets }), { status: 200 });
+    return new Response(JSON.stringify({ wallets }), {
+      status: 200,
+    });
   } catch (error) {
     console.error("Error fetching wallets:", error);
     return new Response(
