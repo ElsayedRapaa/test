@@ -10,6 +10,7 @@ const PrizePopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [prizeAmount, setPrizeAmount] = useState<number | null>(null);
+  const [showPirze, setShowPrize] = useState(true);
 
   useEffect(() => {
     const fetchPrizeAmount = async () => {
@@ -28,12 +29,15 @@ const PrizePopup: React.FC = () => {
                 (wallet: { currency: string }) => wallet.currency === "USDT"
               )?.balance || 0
             );
-            if (
-              data.wallets.find(
-                (wallet: { currency: string }) => wallet.currency === "USDT"
-              )?.balance > 0
-            ) {
-              setIsOpen(true);
+            // if (
+            //   data.wallets.find(
+            //     (wallet: { currency: string }) => wallet.currency === "USDT"
+            //   )?.balance > 0
+            // ) {
+            //   setIsOpen(true);
+            // }
+            if (session?.user?.hasReceivedPrize) {
+              setShowPrize(false);
             }
           }
         } catch (error) {
@@ -77,11 +81,11 @@ const PrizePopup: React.FC = () => {
     }
   };
 
-  if (loading) {
+  if (loading && !showPirze) {
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-black/80" />
-        <p className="text-black">Loading...</p>
+        <div className="absolute inset-0 bg-white opacity-75"></div>
+        <div className="border-r-0 border-l-4 border-t-4 border-b-4 border-black rounded-full w-8 h-8 animate-spin"></div>
       </div>
     );
   }
@@ -90,7 +94,8 @@ const PrizePopup: React.FC = () => {
     !isOpen ||
     prizeAmount === null ||
     prizeAmount <= 0 ||
-    window.localStorage.getItem("taked-prize")
+    window.localStorage.getItem("taked-prize") ||
+    !showPirze
   )
     return null;
 

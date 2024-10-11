@@ -30,6 +30,8 @@ const Trading: React.FC<TradingProps> = ({ currency, image }) => {
         fixed
         top-24
         h-full
+        overflow-y-scroll
+        pb-10
       `}
     >
       <div

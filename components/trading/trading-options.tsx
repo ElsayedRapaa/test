@@ -187,6 +187,7 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
           sm:grid-cols-2
           grid-cols-1
           gap-x-4
+          gap-y-4
         "
       >
         <div
@@ -220,7 +221,9 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
           className={`
             px-4
             py-2
-            skew-x-12
+            sm:skew-x-12
+            sm:rounded-none
+            rounded-md
             text-white
             ${tradeState === "Up" ? "bg-green-700" : "bg-gray-500"}
             hover:bg-green-600
@@ -234,10 +237,12 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
           className={`
             px-4
             py-2
-            -skew-x-12
+            sm:-skew-x-12
+            sm:rounded-none
+            rounded-md
             text-white
-            ${tradeState === "Fall" ? "bg-red-700" : "bg-gray-500"}
-            hover:bg-red-600
+            ${tradeState === "Fall" ? "bg-red-600" : "bg-gray-500"}
+            hover:bg-red-600/90
             duration-200
           `}
           onClick={() => setTradeState("Fall")}
@@ -281,19 +286,17 @@ const TradingOptions: React.FC<TradingOptionsProps> = ({
           onChange={handleInputChange}
           onFocus={handleFocus}
         />
-        <p className="p-2 text-black border">Minmum: 100</p>
+        <p className="p-2 text-black border sm:block hidden">Minmum: 100</p>
       </div>
       <button
         className={`
-          ${tradeState === "Up" ? "bg-green-700" : "bg-red-700"}
+          ${tradeState === "Up" ? "bg-green-700" : "bg-red-600"}
           hover:bg-opacity-90
           text-white
           block
-          sm:w-[60%]
           w-full
-          sm:mx-auto
-          mx-4
-          mt-6
+          mx-auto
+          mt-2
           rounded-md
           duration-200
           py-2

@@ -39,13 +39,13 @@ const UserCountNotification: React.FC = () => {
   return (
     <div>
       {isPopupVisible && newUsername && (
-        <div className="fixed top-5 right-5 bg-green-500 text-white rounded-lg p-4 shadow-lg">
+        <div className="fixed top-5 right-5 bg-white text-black rounded-lg p-4 shadow-lg">
           <p>
             New user registered: {newUsername} - {userCount}
           </p>
           <button
             onClick={closePopup}
-            className="bg-red-600 text-white rounded px-2 py-1 mt-2"
+            className="bg-black text-white rounded-md px-2 py-1 mt-2"
           >
             Close
           </button>

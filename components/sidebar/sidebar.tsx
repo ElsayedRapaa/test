@@ -16,6 +16,12 @@ const Sidebar = () => {
     sidebar.onClose();
   };
 
+  const userSignOut = () => {
+    signOut();
+
+    window.localStorage.removeItem("taked-prize");
+  };
+
   return (
     <aside
       className={`
@@ -70,7 +76,7 @@ const Sidebar = () => {
             duration-300
             mt-6
           "
-          onClick={() => signOut()}
+          onClick={userSignOut}
         >
           Logout
         </button>

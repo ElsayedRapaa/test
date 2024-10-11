@@ -52,7 +52,7 @@ const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
           new (window as any).TradingView.widget({
             symbol: `BINANCE:${formattedCoinId}`,
             container_id: "tradingview-chart",
-            width: "90%",
+            width: "100%",
             height: "500px",
             theme: "dark",
             style: "1",
@@ -90,7 +90,7 @@ const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
   return (
     <section className="h-full bg-white">
       <HeaderBackButton />
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center sm:pb-0 pb-10">
         <div
           className="
             flex
@@ -120,8 +120,8 @@ const CoidId: React.FC<CoinIdProps> = ({ params: { coinId } }) => {
               bg-blue-600
               text-white
               block
-              sm:w-[60%]
-              w-full
+              sm:w-[90%]
+              w-[90%]
               sm:mx-auto
               mx-4
               mt-6

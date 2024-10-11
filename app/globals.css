@@ -108,8 +108,8 @@ body {
 
 .custom-toast {
   max-width: 500px !important;
-  width: 320px !important;
   text-align: center !important;
+  margin: 0 20px !important;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
 }
 
