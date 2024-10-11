@@ -14,17 +14,46 @@ const Chat = () => {
       <HeaderBackButton />
       <div
         className="
-          py-4
+          my-4
+          mx-4
+          py-2
+          px-4
+          bg-blue-600
+          rounded-md
           flex
           items-center
-          justify-center
+          justify-between
         "
       >
+        <h4>Chat to Team 1</h4>
         <Link
           href="https://t.me/eatthebl0cks"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-600 underline font-semibold"
+          className="text-white underline font-semibold"
+        >
+          Go To Chat
+        </Link>
+      </div>
+      <div
+        className="
+          my-4
+          mx-4
+          py-2
+          px-4
+          bg-blue-600
+          rounded-md
+          flex
+          items-center
+          justify-between
+        "
+      >
+        <h4>Chat to Team 2</h4>
+        <Link
+          href="https://t.me/erapaa"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white underline font-semibold"
         >
           Go To Chat
         </Link>

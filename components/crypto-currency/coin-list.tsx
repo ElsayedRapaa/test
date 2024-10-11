@@ -53,12 +53,13 @@ const coinImages: { [key: string]: string } = {
     "https://assets.coingecko.com/coins/images/877/large/chainlink-new-logo.png",
   xlmusdt:
     "https://assets.coingecko.com/coins/images/100/large/Stellar_symbol_black_RGB.png",
-  vetusdt: "https://assets.coingecko.com/coins/images/2226/large/VeChain.png",
+  vetusdt:
+    "https://assets.coingecko.com/coins/images/1167/standard/VET_Token_Icon.png?1710013505",
   atomusdt:
     "https://assets.coingecko.com/coins/images/1481/large/cosmos_hub.png",
   trxusdt: "https://assets.coingecko.com/coins/images/1094/large/tron-logo.png",
   sandusdt:
-    "https://assets.coingecko.com/coins/images/12129/large/sandbox_logo.png",
+    "https://assets.coingecko.com/coins/images/12129/standard/sandbox_logo.jpg?1696511971",
   thetausdt:
     "https://assets.coingecko.com/coins/images/2538/large/theta-token-logo.png",
 };
@@ -148,7 +149,7 @@ const CoinList = () => {
                         : "bg-gray-300"
                     }`}
                   >
-                    {data.priceChangePercentage24h}%
+                    {data.priceChangePercentage24h.toFixed(2)}%
                   </span>
                 </Link>
               </div>
