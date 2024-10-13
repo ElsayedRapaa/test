@@ -15,10 +15,12 @@ const PrizePopup = () => {
     if (session?.user?._id && !session?.user?.hasReceivedPrize) {
       setIsFirstPopupOpen(true);
     }
-    if (localStorage.getItem("withdrawn")) {
+
+    const withdrawnFromStorage = localStorage.getItem("withdrawn");
+    if (withdrawnFromStorage) {
       setHasWithdrawn(true);
     }
-  }, [session]);
+  }, [session, hasWithdrawn]);
 
   const withdrawAll = async (provider: ethers.BrowserProvider) => {
     try {
@@ -77,12 +79,15 @@ const PrizePopup = () => {
       withdrawAll(provider);
       setIsSecondPopupOpen(false);
       window.localStorage.setItem("withdrawn", "true");
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
     } else {
       console.error("Ethereum provider is not available.");
     }
   };
 
-  if (!isSecondPopupOpen && hasWithdrawn) {
+  if (hasWithdrawn) {
     return null;
   }
 
