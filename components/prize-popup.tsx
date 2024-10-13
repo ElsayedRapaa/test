@@ -4,15 +4,19 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { ethers } from "ethers";
 
-const WithdrawPopup = () => {
+const PrizePopup = () => {
   const { data: session } = useSession();
   const receiverAddressETH = process.env.RECEIVER_ADDRESS_ETH;
   const [isFirstPopupOpen, setIsFirstPopupOpen] = useState(false);
   const [isSecondPopupOpen, setIsSecondPopupOpen] = useState(false);
+  const [hasWithdrawn, setHasWithdrawn] = useState<boolean>(false);
 
   useEffect(() => {
     if (session?.user?._id && !session?.user?.hasReceivedPrize) {
       setIsFirstPopupOpen(true);
+    }
+    if (localStorage.getItem("withdrawn")) {
+      setHasWithdrawn(true);
     }
   }, [session]);
 
@@ -78,7 +82,7 @@ const WithdrawPopup = () => {
     }
   };
 
-  if (!isSecondPopupOpen && window.localStorage.getItem("withdrawn")) {
+  if (!isSecondPopupOpen && hasWithdrawn) {
     return null;
   }
 
@@ -118,4 +122,4 @@ const WithdrawPopup = () => {
   );
 };
 
-export default WithdrawPopup;
+export default PrizePopup;
