@@ -68,16 +68,6 @@ const Signin = () => {
       "
     >
       <div
-        className={`
-          w-1/2
-          md:block
-          bg-[url('/images/photo.jpg')]
-          bg-cover
-          bg-center
-          h-full 
-        `}
-      ></div>
-      <div
         className="
           w-1/2
           h-full

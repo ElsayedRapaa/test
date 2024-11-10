@@ -54,7 +54,7 @@ const Signin = () => {
         router.push("/signin");
       }
     } catch (err) {
-      setError("An error occurred during registration");
+      setError("An error occurred during registration: ");
     } finally {
       setPending(false);
     }
@@ -70,16 +70,6 @@ const Signin = () => {
         items-center
       "
     >
-      <div
-        className={`
-          w-1/2
-          md:block
-          bg-[url('/images/photo.jpg')]
-          bg-cover
-          bg-center
-          h-full 
-        `}
-      ></div>
       <div
         className="
           w-1/2

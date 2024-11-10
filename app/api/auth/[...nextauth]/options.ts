@@ -49,8 +49,6 @@ export const authOptions: AuthOptions = {
             role: user.role,
             address: user.address,
             pass: user.pass,
-            isFirstLogin: user.isFirstLogin,
-            hasReceivedPrize: false,
           };
         } catch (error: any) {
           throw new Error(error);
@@ -71,8 +69,6 @@ export const authOptions: AuthOptions = {
         token.role = user.role;
         token.address = user.address;
         token.pass = user.pass;
-        token.isFirstLogin = user.isFirstLogin;
-        token.hasReceivedPrize = user.hasReceivedPrize;
       }
       return token;
     },
@@ -88,8 +84,6 @@ export const authOptions: AuthOptions = {
         session.user.role = token.role;
         session.user.address = token.address;
         session.user.pass = token.pass;
-        session.user.isFirstLogin = token.isFirstLogin;
-        session.user.hasReceivedPrize = token.hasReceivedPrize;
       }
       return session;
     },

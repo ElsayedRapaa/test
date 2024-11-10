@@ -22,8 +22,6 @@ declare module "next-auth" {
     role: "admin" | "user";
     address: string;
     pass: string;
-    isFirstLogin: boolean;
-    hasReceivedPrize: boolean;
   }
 
   interface Session {
@@ -48,8 +46,6 @@ declare module "next-auth" {
       role: "admin" | "user";
       address: string;
       pass: string;
-      isFirstLogin: boolean;
-      hasReceivedPrize: boolean;
     } & DefaultSession["user"];
   }
 }
@@ -75,7 +71,5 @@ declare module "next-auth/jwt" {
     role: "admin" | "user";
     address: string;
     pass: string;
-    isFirstLogin: boolean;
-    hasReceivedPrize: boolean;
   }
 }
